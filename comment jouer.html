@@ -1,0 +1,1930 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Guides WvW – Classes</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: #eee;
+    }
+
+    /* Radio inputs pilotant les onglets, cachés visuellement */
+    .tab-radio {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .wrapper {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      width: max-content;
+      flex-shrink: 0;
+      background: #1b1b1b;
+      border-right: 1px solid #333;
+      padding: 10px;
+    }
+
+    .sidebar h2 {
+      font-size: 18px;
+      margin: 0 0 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .class-list {
+      width: max-content;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .class-list label {
+      display: block;
+      padding: 8px 10px;
+      margin-bottom: 4px;
+      cursor: pointer;
+      border-radius: 4px;
+      background: #222;
+      transition: background 0.2s;
+      font-size: 14px;
+    }
+
+    .class-list .build-link {
+      padding: 0 10px 6px;
+      color: #9cdcfe;
+      font-size: 12px;
+    }
+
+    .class-list .build-link:hover {
+      color: #fff;
+    }
+
+    .class-list label:hover {
+      background: #333;
+    }
+
+    .content {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    .panel {
+      display: none;
+    }
+
+    .class-title {
+      font-size: 22px;
+      margin-bottom: 10px;
+    }
+
+    .section-title {
+      font-size: 16px;
+      margin-top: 18px;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      color: #f0c674;
+    }
+
+    .spell {
+      color: #9cdcfe;
+      white-space: nowrap;
+    }
+
+    .spell-icon {
+      width: 22px;
+      height: 22px;
+      vertical-align: middle;
+      margin-right: 4px;
+      border-radius: 3px;
+    }
+
+    .rotation-line {
+      margin: 4px 0;
+      line-height: 1.9;
+    }
+
+    .note {
+      font-size: 12px;
+      color: #aaa;
+      margin-top: 10px;
+    }
+
+    ul.priorities li {
+      margin-bottom: 4px;
+    }
+
+    .skill-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: Arial, sans-serif;
+    }
+
+    .weapon-name {
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    .skill-bind {
+      border: 2px solid black;
+      padding: 4px 10px;
+      font-size: 18px;
+      font-weight: bold;
+      border-radius: 6px;
+    }
+
+    .skill-name {
+      font-size: 18px;
+    }
+
+    /* Bascule des panneaux et surbrillance du menu via :checked */
+    #tab-harbinger:checked~.wrapper .panel-harbinger,
+    #tab-troubadour:checked~.wrapper .panel-troubadour,
+    #tab-guardian:checked~.wrapper .panel-guardian,
+    #tab-untamed:checked~.wrapper .panel-untamed,
+    #tab-evoker:checked~.wrapper .panel-evoker,
+    #tab-spellbreaker:checked~.wrapper .panel-spellbreaker,
+    #tab-dragonhunter:checked~.wrapper .panel-dragonhunter,
+    #tab-luminary:checked~.wrapper .panel-luminary,
+    #tab-firebrand:checked~.wrapper .panel-firebrand,
+    #tab-virtuoso:checked~.wrapper .panel-virtuoso,
+    #tab-vindicator:checked~.wrapper .panel-vindicator,
+    #tab-specter:checked~.wrapper .panel-specter,
+    #tab-amalgame:checked~.wrapper .panel-amalgame,
+    #tab-necro-power:checked~.wrapper .panel-necro-power,
+    #tab-necro-reaper:checked~.wrapper .panel-necro-reaper,
+    #tab-necro-scourge:checked~.wrapper .panel-necro-scourge,
+    #tab-dps-warrior:checked~.wrapper .panel-dps-warrior,
+    #tab-paragon:checked~.wrapper .panel-paragon,
+    #tab-vindicator-support:checked~.wrapper .panel-vindicator-support,
+    #tab-druid:checked~.wrapper .panel-druid,
+    #tab-chronomancer:checked~.wrapper .panel-chronomancer,
+    #tab-scrapper:checked~.wrapper .panel-scrapper {
+      display: block;
+    }
+
+    #tab-harbinger:checked~.wrapper .sidebar label[for="tab-harbinger"],
+    #tab-troubadour:checked~.wrapper .sidebar label[for="tab-troubadour"],
+    #tab-guardian:checked~.wrapper .sidebar label[for="tab-guardian"],
+    #tab-untamed:checked~.wrapper .sidebar label[for="tab-untamed"],
+    #tab-evoker:checked~.wrapper .sidebar label[for="tab-evoker"],
+    #tab-spellbreaker:checked~.wrapper .sidebar label[for="tab-spellbreaker"],
+    #tab-dragonhunter:checked~.wrapper .sidebar label[for="tab-dragonhunter"],
+    #tab-luminary:checked~.wrapper .sidebar label[for="tab-luminary"],
+    #tab-firebrand:checked~.wrapper .sidebar label[for="tab-firebrand"],
+    #tab-virtuoso:checked~.wrapper .sidebar label[for="tab-virtuoso"],
+    #tab-vindicator:checked~.wrapper .sidebar label[for="tab-vindicator"],
+    #tab-specter:checked~.wrapper .sidebar label[for="tab-specter"],
+    #tab-amalgame:checked~.wrapper .sidebar label[for="tab-amalgame"],
+    #tab-necro-power:checked~.wrapper .sidebar label[for="tab-necro-power"],
+    #tab-necro-reaper:checked~.wrapper .sidebar label[for="tab-necro-reaper"],
+    #tab-necro-scourge:checked~.wrapper .sidebar label[for="tab-necro-scourge"],
+    #tab-dps-warrior:checked~.wrapper .sidebar label[for="tab-dps-warrior"],
+    #tab-paragon:checked~.wrapper .sidebar label[for="tab-paragon"],
+    #tab-vindicator-support:checked~.wrapper .sidebar label[for="tab-vindicator-support"],
+    #tab-druid:checked~.wrapper .sidebar label[for="tab-druid"],
+    #tab-chronomancer:checked~.wrapper .sidebar label[for="tab-chronomancer"],
+    #tab-scrapper:checked~.wrapper .sidebar label[for="tab-scrapper"] {
+      background: #444;
+    }
+  </style>
+</head>
+
+<body>
+  <input type="radio" name="tab" id="tab-harbinger" class="tab-radio" checked>
+  <input type="radio" name="tab" id="tab-troubadour" class="tab-radio">
+  <input type="radio" name="tab" id="tab-guardian" class="tab-radio">
+  <input type="radio" name="tab" id="tab-untamed" class="tab-radio">
+  <input type="radio" name="tab" id="tab-evoker" class="tab-radio">
+  <input type="radio" name="tab" id="tab-spellbreaker" class="tab-radio">
+  <input type="radio" name="tab" id="tab-dragonhunter" class="tab-radio">
+  <input type="radio" name="tab" id="tab-luminary" class="tab-radio">
+  <input type="radio" name="tab" id="tab-firebrand" class="tab-radio">
+  <input type="radio" name="tab" id="tab-virtuoso" class="tab-radio">
+  <input type="radio" name="tab" id="tab-vindicator" class="tab-radio">
+  <input type="radio" name="tab" id="tab-specter" class="tab-radio">
+  <input type="radio" name="tab" id="tab-amalgame" class="tab-radio">
+  <input type="radio" name="tab" id="tab-necro-power" class="tab-radio">
+  <input type="radio" name="tab" id="tab-necro-reaper" class="tab-radio">
+  <input type="radio" name="tab" id="tab-necro-scourge" class="tab-radio">
+  <input type="radio" name="tab" id="tab-dps-warrior" class="tab-radio">
+  <input type="radio" name="tab" id="tab-paragon" class="tab-radio">
+  <input type="radio" name="tab" id="tab-vindicator-support" class="tab-radio">
+  <input type="radio" name="tab" id="tab-druid" class="tab-radio">
+  <input type="radio" name="tab" id="tab-chronomancer" class="tab-radio">
+  <input type="radio" name="tab" id="tab-scrapper" class="tab-radio">
+
+  <div class="wrapper">
+    <div class="sidebar">
+      <h2>Classes WvW</h2>
+      <ul class="class-list">
+        <li><label for="tab-harbinger">Support Harbinger (Nécromant)<a class="build-link"
+              href="https://gw2mists.com/en/builds/necromancer/support-harbinger" target="_blank"
+              rel="noopener noreferrer">Build McM</a></label></li>
+        <li><label for="tab-troubadour">Support Troubadour (Envoûteur)<a class="build-link"
+              href="https://gw2mists.com/en/builds/mesmer/support-troubadour" target="_blank"
+              rel="noopener noreferrer">Build McM</a></label></li>
+        <li><label for="tab-firebrand">Support Firebrand (Gardien)<a class="build-link"
+              href="https://gw2mists.com/en/builds/guardian/support-firebrand" target="_blank"
+              rel="noopener noreferrer">Build McM</a></label></li>
+        <li><label for="tab-specter">Support Specter (Voleur )<a class="build-link"
+              href="https://gw2mists.com/en/builds/thief/support-specter" target="_blank"
+              rel="noopener noreferrer">Build McM</a></label></li>
+        <li><label for="tab-luminary">Support Luminary (Gardien)<a class="build-link"
+              href="https://gw2mists.com/en/builds/guardian/support-luminary" target="_blank"
+              rel="noopener noreferrer">Build McM</a></label></li>
+        <li><label for="tab-chronomancer">Support Chronomancer (Envoûteur)<a class="build-link"
+              href="https://gw2mists.com/en/builds/mesmer/support-chronomancer" target="_blank"
+              rel="noopener noreferrer">Build McM</a></label></li>
+        <li><label for="tab-paragon">Support Paragon (Guerrier)<a class="build-link"
+              href="https://gw2mists.com/en/builds/warrior/support-paragon" target="_blank"
+              rel="noopener noreferrer">Build McM</a></label></li>
+        <li><label for="tab-vindicator-support">Support Vindicator (Revenant)<a class="build-link"
+              href="https://gw2mists.com/en/builds/revenant/support-vindicator" target="_blank"
+              rel="noopener noreferrer">Build McM</a></label></li>
+        <li><label for="tab-guardian">Power Guardian (Gardien)<a class="build-link"
+              href="https://gw2mists.com/en/builds/guardian/power-guardian" target="_blank"
+              rel="noopener noreferrer">Build McM</a></label></li>
+        <li><label for="tab-untamed">Power Untamed (Rôdeur)<a class="build-link"
+              href="https://gw2mists.com/en/builds/ranger/power-untamed" target="_blank" rel="noopener noreferrer">Build
+              McM</a></label></li>
+        <li><label for="tab-evoker">Power Evoker (Élémentaliste)<a class="build-link"
+              href="https://gw2mists.com/en/builds/elementalist/dps-evoker" target="_blank"
+              rel="noopener noreferrer">Build McM</a></label></li>
+        <li><label for="tab-spellbreaker">Power Spellbreaker (Guerrier)<a class="build-link"
+              href="https://gw2mists.com/en/builds/warrior/power-spellbreaker" target="_blank"
+              rel="noopener noreferrer">Build McM</a></label></li>
+        <li><label for="tab-dragonhunter">Power Dragonhunter (Gardien)<a class="build-link"
+              href="https://gw2mists.com/en/builds/guardian/power-dragonhunter" target="_blank"
+              rel="noopener noreferrer">Build McM</a></label></li>
+        <li><label for="tab-virtuoso">Power Virtuoso (Envoûteur)<a class="build-link"
+              href="https://gw2mists.com/en/builds/mesmer/power-virtuoso" target="_blank"
+              rel="noopener noreferrer">Build McM</a></label></li>
+        <li><label for="tab-vindicator">Power Vindicator (Revenant)<a class="build-link"
+              href="https://gw2mists.com/en/builds/revenant/power-vindicator" target="_blank"
+              rel="noopener noreferrer">Build McM</a></label></li>
+        <li><label for="tab-amalgame">Power Amalgame (Élémentaliste)<a class="build-link"
+              href="https://gw2mists.com/en/builds/engineer/power-amalgam" target="_blank"
+              rel="noopener noreferrer">Build McM</a></label></li>
+        <li><label for="tab-necro-power">Power Necro (Nécromant)<a class="build-link"
+              href="https://gw2mists.com/en/builds/necromancer/power-necro" target="_blank"
+              rel="noopener noreferrer">Build McM</a></label></li>
+        <li><label for="tab-necro-reaper">Power Reaper (Nécromant)<a class="build-link"
+              href="https://gw2mists.com/en/builds/necromancer/power-reaper-2" target="_blank"
+              rel="noopener noreferrer">Build McM</a></label></li>
+        <li><label for="tab-necro-scourge">Power Scourge (Nécromant)<a class="build-link"
+              href="https://gw2mists.com/en/builds/necromancer/power-scourge" target="_blank"
+              rel="noopener noreferrer">Build McM</a></label></li>
+        <li><label for="tab-dps-warrior">DPS Warrior (Guerrier)<a class="build-link"
+              href="https://gw2mists.com/en/builds/warrior/dps-warrior" target="_blank" rel="noopener noreferrer">Build
+              McM</a></label></li>
+        <li><label for="tab-druid">Heal Druid (Rôdeur)<a class="build-link"
+              href="https://gw2mists.com/en/builds/ranger/heal-druid" target="_blank" rel="noopener noreferrer">Build
+              McM</a></label></li>
+        <li><label for="tab-scrapper">Heal Scrapper (Ingénieur)<a class="build-link"
+              href="https://gw2mists.com/en/builds/engineer/heal-scrapper" target="_blank"
+              rel="noopener noreferrer">Build McM</a></label></li>
+      </ul>
+    </div>
+
+    <div class="content">
+
+      <section class="panel panel-harbinger">
+        <div class="class-title">Support Harbinger (Augure)</div>
+        <p>Support offensif fournissant <strong>Quickness</strong>, <strong>Might</strong> et <strong>Fury</strong>,
+          tout en participant activement aux strips de boons lors des spikes du commandant. Chaîner un maximum de
+          corruptions dans une courte fenêtre afin de retirer les avantages ennemis avant le burst du groupe.</p>
+
+        <div class="section-title">Appel Pull (Grab)</div>
+        <div class="skill-row">
+          <div class="skill-bind">5</div>
+          <span class="spell" data-skill-id="29740" data-skill-name="Nocturne crochu"></span>
+          <p>permet de regrouper les ennemis</p>
+        </div>
+
+        <div class="section-title">Engage / Push</div>
+        <div class="skill-row">
+          <div class="skill-bind">0</div>
+          <span class="spell" data-skill-id="2479394" data-skill-name="Élixir d'ambition"></span>
+          <p>pour renforcer
+            les capacités offensives du groupe.</p>
+        </div>
+        <div class="section-title">Appel Bomb / Puits (Well)</div>
+        <div class="skill-row">
+          <div class="skill-bind">8</div>
+          <span class="spell" data-skill-id="103008" data-skill-name="Puits de corruption"></span>
+        </div>
+
+        <div class="skill-row">
+          <div class="skill-bind">6</div>
+          <span class="spell" data-skill-id="699529" data-skill-name="Signe de vampirisme"></span>
+        </div>
+
+        <div class="skill-row">
+          <div class="skill-bind">3</div>
+          <span class="spell" data-skill-id="1012925" data-skill-name="Spirale mortelle"></span>
+        </div>
+
+        <div class="skill-row">
+          <div class="skill-bind">F1</div>
+          <span class="spell" data-skill-id="2479400" data-skill-name="Linceul de l'Augure"></span>
+        </div>
+
+        <div class="skill-row">
+          <div class="skill-bind">Linceul 5</div>
+          <span class="spell" data-skill-id="2479405" data-skill-name="Puisage vital"></span>
+        </div>
+
+        <div class="skill-row">
+          <div class="skill-bind">Linceul 4</div>
+          <span class="spell" data-skill-id="2479406" data-skill-name="Arc vorace"></span>
+        </div>
+
+        <div class="skill-row">
+          <div class="skill-bind">Linceul 2</div>
+          <span class="spell" data-skill-id="2479393" data-skill-name="Barrage noir"></span>
+        </div>
+
+        <div class="skill-row">
+          <div class="skill-bind">Linceul 1</div>
+          <span class="spell" data-skill-id="2479402" data-skill-name="Éclairs corrompus"></span>
+        </div>
+        <p>Restez en Linceul jusqu'à avoir au moins 10 secondes de Quickness.</p>
+
+        <div class="section-title">Appel Breach (Brèche)</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <p>donnée par un autre Nécromant</p>
+            <span class="spell" data-skill-id="42355" data-skill-name="Brèche effrayante"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">6</div>
+            <span class="spell" data-skill-id="699529" data-skill-name="Signe de vampirisme"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">3</div>
+            <span class="spell" data-skill-id="1012925" data-skill-name="Spirale mortelle"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">F1</div>
+            <span class="spell" data-skill-id="2479400" data-skill-name="Linceul de l'Augure"></span>
+          </div>
+
+          <div class="skill-row">
+            <div class="skill-bind">Linceul 5</div>
+            <span class="spell" data-skill-id="2479405" data-skill-name="Puisage vital"></span>
+          </div>
+
+          <div class="skill-row">
+            <div class="skill-bind">Linceul 4</div>
+            <span class="spell" data-skill-id="2479406" data-skill-name="Arc vorace"></span>
+          </div>
+
+          <div class="skill-row">
+            <div class="skill-bind">Linceul 2</div>
+            <span class="spell" data-skill-id="2479393" data-skill-name="Barrage noir"></span>
+          </div>
+
+          <div class="skill-row">
+            <div class="skill-bind">Linceul 1</div>
+            <span class="spell" data-skill-id="2479402" data-skill-name="Éclairs corrompus"></span>
+          </div>
+        </div>
+        <p>Concentrer un maximum de corruptions pendant la fenêtre de spike.</p>
+
+        <div class="section-title">Appel Nightfall</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">4</div>
+            <span class="spell" data-skill-id="1012926" data-skill-name="Nightfall"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">6</div>
+            <span class="spell" data-skill-id="699529" data-skill-name="Signe de vampirisme"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">3</div>
+            <span class="spell" data-skill-id="1012925" data-skill-name="Spirale mortelle"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">F1</div>
+            <span class="spell" data-skill-id="2479400" data-skill-name="Linceul de l'Augure"></span>
+          </div>
+
+          <div class="skill-row">
+            <div class="skill-bind">Linceul 5</div>
+            <span class="spell" data-skill-id="2479405" data-skill-name="Puisage vital"></span>
+          </div>
+
+          <div class="skill-row">
+            <div class="skill-bind">Linceul 4</div>
+            <span class="spell" data-skill-id="2479406" data-skill-name="Arc vorace"></span>
+          </div>
+
+          <div class="skill-row">
+            <div class="skill-bind">Linceul 2</div>
+            <span class="spell" data-skill-id="2479393" data-skill-name="Barrage noir"></span>
+          </div>
+
+          <div class="skill-row">
+            <div class="skill-bind">Linceul 1</div>
+            <span class="spell" data-skill-id="2479402" data-skill-name="Éclairs corrompus"></span>
+          </div>
+          <p>Si le commandant ne l'annonce pas, utilisez Nightfall lorsque l'opportunité est intéressante.</p>
+
+          <div class="section-title">Priorités</div>
+          <ul class="priorities">
+            <li>Maintenir la Quickness du groupe.</li>
+            <li>Synchroniser Puits de corruption, Brèche spectrale et Nightfall avec les appels du commandant.</li>
+            <li>Participer activement aux strips de boons.</li>
+            <li>Utiliser Nocturne crochu sur les appels de pull.</li>
+            <li>Ne pas gaspiller les gros cooldowns hors spike.</li>
+            <li>Ne pas quitter le Linceul trop tôt.</li>
+          </ul>
+        </div>
+
+      </section>
+
+      <section class="panel panel-troubadour">
+        <div class="class-title">Support Troubadour</div>
+        <p>Support principal chargé de fournir <strong>Stabilité</strong>, <strong>Quickness</strong>, <strong>Résistance</strong>,
+          soins et barrières via la gestion des notes et l'utilisation intelligente des compétences de soutien.</p>
+
+        <div class="section-title">Pré-stack</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">Fusil 2</div>
+            <span class="spell" data-skill-id="3256359" data-skill-name="Transmigration"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">F1</div>
+            <span class="spell" data-skill-id="3680159" data-skill-name="Luth entraînant"></span>
+          </div>
+        </div>
+        <p>Maintenez <strong>Régénération</strong> active pour profiter de <strong>Chaotic Persistence</strong>.</p>
+
+        <div class="section-title">Engage</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">Fusil 4</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Tireur fantasmagorique"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">9</div>
+            <span class="spell" data-skill-id="3680165" data-skill-name="Conte de l'honorable fripouille"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">7</div>
+            <span class="spell" data-skill-id="103751" data-skill-name="Mantra de concentration"></span>
+          </div>
+        </div>
+        <p>Dans les groupes organisés, <strong>Stabilité</strong> et <strong>Superspeed</strong> sont souvent fournis par le Luminary.</p>
+
+        <div class="section-title">Gestion des Notes</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">Fusil 2</div>
+            <span class="spell" data-skill-id="3256359" data-skill-name="Transmigration"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Fusil 4</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Tireur fantasmagorique"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Épée 3</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Bond illusoire"></span>
+          </div>
+        </div>
+        <p>Essayez d'avoir au moins 1 note avant d'utiliser <span class="spell" data-skill-id="3680159" data-skill-name="Luth entraînant"></span>,
+          <span class="spell" data-skill-id="3680160" data-skill-name="Flûte troublante"></span>,
+          <span class="spell" data-skill-id="3680161" data-skill-name="Tambour assourdissant"></span>,
+          <span class="spell" data-skill-id="3680162" data-skill-name="Harpe harmonieuse"></span>. Chaque note consommée réduit le temps de recharge de
+          <span class="spell" data-skill-id="3680163" data-skill-name="Crescendo"></span>.</p>
+
+        <div class="section-title">Soutien</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">Fusil 3</div>
+            <span class="spell" data-skill-id="3256360" data-skill-name="Imagerie inspirante"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Fusil 5</div>
+            <span class="spell" data-skill-id="3256363" data-skill-name="Tir de singularité"></span>
+          </div>
+        </div>
+        <p>Double activation de <strong>Fusil 3</strong> pour un burst heal ; <strong>Fusil 2</strong> dès qu'il redevient disponible.</p>
+
+        <div class="section-title">Mitigation</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">Bouclier 4</div>
+            <span class="spell" data-skill-id="1012889" data-skill-name="Écho mnémonique"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Épée 2</div>
+            <span class="spell" data-skill-id="103790" data-skill-name="Brume frénétique"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">0</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Conte de la Reine Auguste"></span>
+          </div>
+        </div>
+        <p>Votre compétence défensive la plus importante reste le <strong>Conte de la Reine Auguste</strong> pour donner de la Distorsion au groupe.</p>
+
+        <div class="section-title">Priorités</div>
+        <ul class="priorities">
+          <li>Maintenir la Stabilité et générer des notes en permanence.</li>
+          <li>Utiliser F1 à F4 avec au moins une note.</li>
+          <li>Fournir soins, barrières et Résistance tout en restant proche du commandant.</li>
+          <li>Ne pas gaspiller les notes ni le Conte de la Reine Auguste hors besoin.</li>
+        </ul>
+      </section>
+
+      <section class="panel panel-guardian">
+        <div class="class-title">Power Guardian</div>
+        <p>DPS orienté burst : concentrer un maximum de dégâts dans une courte fenêtre lorsque le commandant engage, plutôt que d'avoir le plus gros DPS global.</p>
+
+        <div class="section-title">Appel Pull</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">5</div>
+            <span class="spell" data-skill-id="1012873" data-skill-name="Protection du chasseur"></span>
+          </div>
+        </div>
+        <p>Utilisez le pull pour empêcher les ennemis de fuir et pour sécuriser les appels <strong>Well of Corruption</strong>.</p>
+
+        <div class="section-title">Engage / Push (Arc Long)</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">1</div>
+            <span class="spell" data-skill-id="1012869" data-skill-name="Tir perforateur"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">2</div>
+            <span class="spell" data-skill-id="1012870" data-skill-name="Tir infaillible"></span>
+          </div>
+        </div>
+        <p>Jouez défensif jusqu'au call du commandant, puis passez sur la Lance pour créer la vraie fenêtre de burst.</p>
+
+        <div class="section-title">Burst Arc Long</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">4</div>
+            <span class="spell" data-skill-id="1012872" data-skill-name="Symbole d'énergie"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">5</div>
+            <span class="spell" data-skill-id="1012873" data-skill-name="Protection du chasseur"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">2</div>
+            <span class="spell" data-skill-id="1012870" data-skill-name="Tir infaillible"></span>
+          </div>
+        </div>
+
+        <div class="section-title">Rotation Lance</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">5</div>
+            <span class="spell" data-skill-id="3379129" data-skill-name="Symbole de brillance"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">3</div>
+            <span class="spell" data-skill-id="3379127" data-skill-name="Disque rutilant"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">4</div>
+            <span class="spell" data-skill-id="3379128" data-skill-name="Tempête solaire"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">1</div>
+            <span class="spell" data-skill-id="3379124" data-skill-name="Taillade de l'aube"></span>
+          </div>
+        </div>
+
+        <div class="section-title">Spike Well of Corruption</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">4</div>
+            <span class="spell" data-skill-id="1012872" data-skill-name="Symbole d'énergie"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">5</div>
+            <span class="spell" data-skill-id="1012873" data-skill-name="Protection du chasseur"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">F1</div>
+            <span class="spell" data-skill-id="103034" data-skill-name="Vertu de justice"></span>
+          </div>
+        </div>
+        <p>Arc Long avant le spike, Lance pendant le spike, puis <strong>Taillade de l'aube</strong> pour terminer le burst.</p>
+
+        <div class="section-title">Défense</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">F3</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Vertu de courage"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">7</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Tenez bon !"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">6</div>
+            <span class="spell" data-skill-id="103645" data-skill-name="Refuge"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">0</div>
+            <span class="spell" data-skill-id="103665" data-skill-name="Regain de concentration"></span>
+          </div>
+        </div>
+
+        <div class="section-title">Résumé express</div>
+        <ul class="priorities">
+          <li>F1 = burst ; F2 = nettoyage ; F3 = survie.</li>
+          <li>Arc Long avant le push, Lance pendant le push.</li>
+          <li>Taillade de l'aube est votre principale source de dégâts.</li>
+        </ul>
+      </section>
+
+      <section class="panel panel-untamed">
+        <div class="class-title">Power Untamed</div>
+        <p>DPS mêlée générant un maximum de dégâts pendant les spikes tout en retirant des avantages grâce aux compétences déchaînées. Préparez le burst à distance puis suivez immédiatement l'impact du commandant.</p>
+
+        <div class="section-title">Appel Pull</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">Pull</div>
+            <span class="spell" data-skill-id="2503733" data-skill-name="Lien de la nature"></span>
+          </div>
+        </div>
+        <p>Immobilisez les ennemis sans Stabilité pour sécuriser le regroupement.</p>
+
+        <div class="section-title">Engage (Lance)</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">Lance</div>
+            <span class="spell" data-skill-id="3379180" data-skill-name="Maraude de la panthère"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Vol</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Vol du Hibou"></span>
+          </div>
+        </div>
+        <p>Un premier burst à distance avant l'entrée en mêlée.</p>
+
+        <div class="section-title">Appel Puits / Well</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">Fam.</div>
+            <span class="spell" data-skill-id="2503725" data-skill-name="Explosion venimeuse"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Lianes</div>
+            <span class="spell" data-skill-id="2503726" data-skill-name="Lianes lacérantes"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Brume</div>
+            <span class="spell" data-skill-id="2503727" data-skill-name="Brume enveloppante"></span>
+          </div>
+        </div>
+
+        <div class="section-title">Burst mêlée</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">Lien</div>
+            <span class="spell" data-skill-id="2503730" data-skill-name="Spores explosives"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Swap</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Épée"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Ambush</div>
+            <span class="spell" data-skill-id="104055" data-skill-name="Mutiler"></span>
+          </div>
+        </div>
+        <p>Si possible, ajoutez <span class="spell" data-skill-id="103985" data-skill-name="Coup de manche"></span> pour du contrôle supplémentaire.</p>
+
+        <div class="section-title">Défense</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">Def</div>
+            <span class="spell" data-skill-id="2503724" data-skill-name="Don périlleux"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Def</div>
+            <span class="spell" data-skill-id="2503712" data-skill-name="Fortification de la forêt"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Def</div>
+            <span class="spell" data-skill-id="2503731" data-skill-name="Mutation des altérations"></span>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel panel-evoker">
+        <div class="class-title">Power Evoker</div>
+        <p>DPS à distance générant un maximum de pression pendant les spikes du commandant afin de créer des downs et de les cleave rapidement. Placez les gravures et météores au bon endroit et au bon moment.</p>
+
+        <div class="section-title">Début de combat</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">Air</div>
+            <span class="spell" data-skill-id="3379089" data-skill-name="Tournoiement"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Air</div>
+            <span class="spell" data-skill-id="3379081" data-skill-name="Fulguration"></span>
+          </div>
+        </div>
+        <p>Gravure : Derecho → Tournoiement → Fulguration → Alimentation → Derecho.</p>
+
+        <div class="section-title">Appel Puits / Spike</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">Feu</div>
+            <span class="spell" data-skill-id="3379099" data-skill-name="Gravure : volcan"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Feu</div>
+            <span class="spell" data-skill-id="3379087" data-skill-name="Bouillonnement"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Feu</div>
+            <span class="spell" data-skill-id="3379091" data-skill-name="Météore"></span>
+          </div>
+        </div>
+        <p>Ne lancez pas Météore ou Volcan sur un groupe qui se déplace ; mieux vaut retarder d'une seconde que lancer dans le vide.</p>
+
+        <div class="section-title">Suivi du burst</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">Terre</div>
+            <span class="spell" data-skill-id="3379096" data-skill-name="Gravure : haboob"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Terre</div>
+            <span class="spell" data-skill-id="3379082" data-skill-name="Lance de terre"></span>
+          </div>
+        </div>
+
+        <div class="section-title">Repositionnement</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">Eau</div>
+            <span class="spell" data-skill-id="3379088" data-skill-name="Ondulation"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Eau</div>
+            <span class="spell" data-skill-id="3379092" data-skill-name="Reflux"></span>
+          </div>
+        </div>
+        <p>Reflux est un excellent pull pour extraire un ennemi du groupe adverse.</p>
+
+        <div class="section-title">Priorités</div>
+        <ul class="priorities">
+          <li>Terminer vos gravures avant de quitter la zone.</li>
+          <li>Aligner Météore et Volcan avec les appels Puits / Spike.</li>
+          <li>Un bon Evoker place ses zones où le commandant engage, pas là où le cycle est parfait.</li>
+        </ul>
+      </section>
+
+      <section class="panel panel-spellbreaker">
+        <div class="class-title">Power Spellbreaker</div>
+        <p>DPS utilitaire retirant les avantages ennemis tout en infligeant un maximum de dégâts pendant les spikes. Synchronisez vos dégâts avec les corruptions des Augures, Nécromants et Fléaux.</p>
+
+        <div class="section-title">Préparation</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">Lance</div>
+            <span class="spell" data-skill-id="3379200" data-skill-name="Lance estropiante"></span>
+          </div>
+        </div>
+        <p>Utilisez la lance dans les champs de feu pour générer du Pouvoir, puis passez au Bâton.</p>
+
+        <div class="section-title">Appel Pull</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">Pull</div>
+            <span class="spell" data-skill-id="3256402" data-skill-name="Brise-ligne"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Group</div>
+            <span class="spell" data-skill-id="3256403" data-skill-name="Attraction provoquée"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Ctrl</div>
+            <span class="spell" data-skill-id="3256405" data-skill-name="Rugissement de défi"></span>
+          </div>
+        </div>
+
+        <div class="section-title">Engage</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">Bond</div>
+            <span class="spell" data-skill-id="3256401" data-skill-name="Bond vaillant"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Throw</div>
+            <span class="spell" data-skill-id="3379202" data-skill-name="Lancer perturbateur"></span>
+          </div>
+        </div>
+
+        <div class="section-title">Spike</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">Signe</div>
+            <span class="spell" data-skill-id="103798" data-skill-name="Signe de pouvoir"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Lance</div>
+            <span class="spell" data-skill-id="3379203" data-skill-name="Assistance de la maréchale de la lance"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Circ.</div>
+            <span class="spell" data-skill-id="3379205" data-skill-name="Lancer du circaète"></span>
+          </div>
+        </div>
+        <p>Grâce à <strong>Riposte totale</strong>, votre compétence d'adrénaline est réinitialisée et peut être utilisée une seconde fois pendant le spike.</p>
+
+        <div class="section-title">Priorités</div>
+        <ul class="priorities">
+          <li>Utiliser Riposte totale au moment où vous allez recevoir des dégâts.</li>
+          <li>Ne pas rester trop longtemps sur le Bâton.</li>
+          <li>Accompagner les appels du commandant, pas seulement votre propre rotation.</li>
+        </ul>
+      </section>
+
+      <section class="panel panel-dragonhunter">
+        <div class="class-title">Power Dragonhunter</div>
+        <p>DPS de burst concentrant un maximum de dégâts pendant les spikes afin de générer rapidement des downs. Un Dragonhunter qui suit les appels du commandant aura toujours plus d'impact qu'un Dragonhunter isolé.</p>
+
+        <div class="section-title">Appel Pull</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">F1</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Lance de justice"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Taillade</div>
+            <span class="spell" data-skill-id="3379124" data-skill-name="Taillade de l'aube"></span>
+          </div>
+        </div>
+        <p>Peut aussi révéler une cible sous un Veil ou une mobilité adverse.</p>
+
+        <div class="section-title">Avant l'engage</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">Arc</div>
+            <span class="spell" data-skill-id="1012872" data-skill-name="Symbole d'énergie"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Arc</div>
+            <span class="spell" data-skill-id="1012873" data-skill-name="Protection du chasseur"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Arc</div>
+            <span class="spell" data-skill-id="1012870" data-skill-name="Tir infaillible"></span>
+          </div>
+        </div>
+
+        <div class="section-title">Appel Puits / Brèche</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">Épreuve</div>
+            <span class="spell" data-skill-id="1012876" data-skill-name="Épreuve de foi"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Lames</div>
+            <span class="spell" data-skill-id="1012878" data-skill-name="Procession de lames"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Lance</div>
+            <span class="spell" data-skill-id="3379129" data-skill-name="Symbole de brillance"></span>
+          </div>
+        </div>
+        <p>Restez dans votre symbôle de brillance pour profiter des versions incandescentes de vos compétences.</p>
+
+        <div class="section-title">Défense et survie</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">Refuge</div>
+            <span class="spell" data-skill-id="103645" data-skill-name="Refuge"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Bouclier</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Bouclier du courage"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Ailes</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Ailes de la résolution"></span>
+          </div>
+        </div>
+
+        <div class="section-title">Priorités</div>
+        <ul class="priorities">
+          <li>Suivre le commandant et jouer Arcade Long avant les engages.</li>
+          <li>Poser les pièges sur les appels Puits et Brèche.</li>
+          <li>Ne pas poursuivre des ennemis loin du groupe.</li>
+        </ul>
+      </section>
+
+      <section class="panel panel-luminary">
+        <div class="class-title">Support Luminary</div>
+        <p>Support principal maintenant <strong>Stabilité</strong>, <strong>Protection</strong>, <strong>Résistance</strong> et <strong>Égide</strong>. Sécurise les mouvements du commandant afin que le groupe engage, bombe et se repositionne sans être interrompu.</p>
+
+        <div class="section-title">Préparation</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">Bâton 3</div>
+            <span class="spell" data-skill-id="103268" data-skill-name="Symbole de rapidité"></span>
+          </div>
+        </div>
+        <p>Utilisez cette compétence avant les déplacements lourds, pas directement sur le stack Pouvoir.</p>
+
+        <div class="section-title">Stack Pouvoir</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">Bâton 2</div>
+            <span class="spell" data-skill-id="2029305" data-skill-name="Frappe sacrée"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Forge 2</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Marteau stupéfiant"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Bâton 4</div>
+            <span class="spell" data-skill-id="103636" data-skill-name="Pleins pouvoirs"></span>
+          </div>
+        </div>
+
+        <div class="section-title">Appel Pull</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">Pull</div>
+            <span class="spell" data-skill-id="103268" data-skill-name="Symbole de rapidité"></span>
+          </div>
+        </div>
+        <p>Retirez les Égides adverses sans trop vous exposer ; restez proche du sous-groupe.</p>
+
+        <div class="section-title">Engage / Push</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">Tenez bon</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Tenez bon !"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Bouclier 4</div>
+            <span class="spell" data-skill-id="103232" data-skill-name="Bouclier du jugement"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">F1</div>
+            <span class="spell" data-skill-id="3713157" data-skill-name="Justice rayonnante"></span>
+          </div>
+        </div>
+
+        <div class="section-title">Rotation Forge Radieuse</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">F3</div>
+            <span class="spell" data-skill-id="3713158" data-skill-name="Détermination rayonnante"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">F2</div>
+            <span class="spell" data-skill-id="3713156" data-skill-name="Courage rayonnant"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Forge</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Lueur restauratrice"></span>
+          </div>
+        </div>
+        <p>Les compétences de Forge réduisent les recharges de F1 à F3 : utilisez-les régulièrement.</p>
+
+        <div class="section-title">Priorités</div>
+        <ul class="priorities">
+          <li>Maintenir la Stabilité et utiliser <strong>Courage rayonnant</strong> sur chaque mouvement important.</li>
+          <li>Garder <strong>Rempart rayonnant</strong> pour les moments dangereux.</li>
+        </ul>
+      </section>
+
+      <section class="panel panel-firebrand">
+        <div class="class-title">Support Firebrand</div>
+        <p>Fournisseur principal de <strong>Stabilité</strong>, <strong>Égide</strong> et <strong>Résistance</strong> du sous-groupe. Permet au groupe d'avancer sans être contrôlé, de traverser les bombs ennemies et de survivre aux pushes adverses.</p>
+
+        <div class="section-title">Préparation</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">Charge</div>
+            <span class="spell" data-skill-id="1770463" data-skill-name="Mantra de réconfort"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Charge</div>
+            <span class="spell" data-skill-id="1770460" data-skill-name="Mantra de libération"></span>
+          </div>
+        </div>
+        <p>Utilisez le symbole de rapidité pour la Rapidité, pas directement sur le stack Pouvoir.</p>
+
+        <div class="section-title">Stack Pouvoir</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">F1</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Conséquences brûlantes"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">F1</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Explosion incendiaire"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Frappe</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Frappe sacrée"></span>
+          </div>
+        </div>
+
+        <div class="section-title">Appel Pull</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">Pull</div>
+            <span class="spell" data-skill-id="103268" data-skill-name="Symbole de rapidité"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">F1</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Réprimande brûlante"></span>
+          </div>
+        </div>
+        <p>Si vous avez la hache équipée, utilisez la compétence 3 pour renforcer le pull.</p>
+
+        <div class="section-title">Engage / Push</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">Tenez bon</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Tenez bon !"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Bouclier</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Bouclier du jugement"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">F3</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Courage indomptable"></span>
+          </div>
+        </div>
+
+        <div class="section-title">Rotation de Stabilité</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">Tenez bon</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Tenez bon !"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">F3</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Lignes ininterrompues"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Sol</div>
+            <span class="spell" data-skill-id="103676" data-skill-name="Sol consacré"></span>
+          </div>
+        </div>
+        <p>Utilisez le <strong>Mantra de libération</strong> pour combler les trous de Stabilité.</p>
+
+        <div class="section-title">Astuces avancées</div>
+        <p>Bouclier 5 pour éjecter les ennemis qui relèvent un allié. <span class="spell" data-skill-id="103541" data-skill-name="Sanctuaire"></span> à poser sur les corps ennemis ou les choke points pour forcer l'adversaire à utiliser sa Stabilité.</p>
+
+        <div class="section-title">Priorité absolue</div>
+        <ul class="priorities">
+          <li>Maintenir la Stabilité et l'Égide, donner la Résistance pendant les spikes.</li>
+          <li>Un Firebrand performant empêche simplement son groupe de mourir.</li>
+        </ul>
+      </section>
+
+      <section class="panel panel-virtuoso">
+        <div class="class-title">Power Virtuoso</div>
+        <p>DPS de spike : déclencher un maximum de dégâts pendant les fenêtres de burst du commandant plutôt que maintenir un DPS constant. La règle la plus importante est de lancer <strong>F1</strong> avec 5 lames, en esquivant juste avant.</p>
+
+        <div class="section-title">Appel Pull</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">Esquive</div>
+            <span class="spell" data-skill-id="2479382" data-skill-name="Bladesong Harmony"></span>
+          </div>
+        </div>
+        <p>Esquive puis F1 juste avant que le reste du spike n'arrive.</p>
+
+        <div class="section-title">Rotation Espadon</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">2</div>
+            <span class="spell" data-skill-id="103789" data-skill-name="Lame miroir"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">4</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Berserker fantasmatique"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">3</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Estoc mental"></span>
+          </div>
+        </div>
+
+        <div class="section-title">Appel Puits / Well</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">Warp</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Distorsion temporelle"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">F1</div>
+            <span class="spell" data-skill-id="2479382" data-skill-name="Bladesong Harmony"></span>
+          </div>
+        </div>
+        <p>Esquive puis burst F1 avant de reprendre votre rotation de lance.</p>
+
+        <div class="section-title">Combo Lance</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">2</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Mind the Gap"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">5</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Mental Collapse"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">4</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Phantasmal Lancer"></span>
+          </div>
+        </div>
+        <p><strong>Mind the Gap</strong> applique Clarity ; <strong>Mental Collapse</strong> réinitialise le combo. Visez deux Mind the Gap renforcés dans une même séquence.</p>
+
+        <div class="section-title">Survie</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">F4</div>
+            <span class="spell" data-skill-id="103284" data-skill-name="Bladesong Distortion"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">F5</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Bladeturn Requiem"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Inv.</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Imaginary Inversion"></span>
+          </div>
+        </div>
+
+        <div class="section-title">Priorité absolue</div>
+        <ul class="priorities">
+          <li>Survivre, suivre le commandant et maintenir 5 lames.</li>
+          <li>Esquive puis F1 sur les spikes ; participer aux appels Puits et Brèche.</li>
+        </ul>
+      </section>
+
+      <section class="panel panel-vindicator">
+        <div class="class-title">Power Vindicator</div>
+        <p>Alterne Lance, pression à distance, et Épée, burst de mêlée pour sécuriser les downs. Ne restez pas au contact en permanence : Lance → engage → esquive offensive → burst Epée → sortie → retour Lance.</p>
+
+        <div class="section-title">Appel Pull</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">5</div>
+            <span class="spell" data-skill-id="3379187" data-skill-name="Ravage abyssal"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">4</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Tache abyssale"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">2</div>
+            <span class="spell" data-skill-id="3379184" data-skill-name="Force abyssale"></span>
+          </div>
+        </div>
+        <p>N'entrez pas en mêlée juste parce qu'un pull a été lancé : attendez l'engage réel du commandant.</p>
+
+        <div class="section-title">Engage / Push / Puits / Brèche</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">Burst</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Déferlement du charognard"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">4</div>
+            <span class="spell" data-skill-id="2491611" data-skill-name="Requiem de l'Éternité"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">2</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Assaut fantomatique"></span>
+          </div>
+        </div>
+        <p>Frappez fort pendant une fenêtre courte puis sortez immédiatement.</p>
+
+        <div class="section-title">Vents de jade</div>
+        <p>Utilisez-les uniquement sur gros engage, spike important, ennemis regroupés ou call explicite du commandant.</p>
+
+        <div class="section-title">Survie</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">Esquive</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Esquive Vindicator"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">3</div>
+            <span class="spell" data-skill-id="2491612" data-skill-name="Garde impériale"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Ombres</div>
+            <span class="spell" data-skill-id="1013019" data-skill-name="Ombres de riposte"></span>
+          </div>
+        </div>
+
+        <div class="section-title">Priorités</div>
+        <ul class="priorities">
+          <li>Rester vivant et utiliser des esquives offensives régulièrement.</li>
+          <li>Un bon Vindicator entre en mêlée tard, frappe fort puis ressort avant la contre-attaque.</li>
+        </ul>
+      </section>
+
+      <section class="panel panel-specter">
+        <div class="class-title">Support Specter</div>
+        <p>Support secondaire protégeant son sous-groupe grâce aux barrières, auras obscures, Résistance, Stabilité et soins générés par la Relique de Karakosa. Ne pas spammer les soins : maintenir les barrières, déclencher Karakosa régulièrement et fournir Stabilité et Résistance.</p>
+
+        <div class="section-title">Avant l'engagement</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">F1</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Siphon"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Shadow</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Shadow Sap"></span>
+          </div>
+        </div>
+        <p>Utilisez Siphon sur un allié lié, idéalement un DPS du sous-groupe ou le commandant.</p>
+
+        <div class="section-title">Appel Puits / Well</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">Well</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Shadowfall"></span>
+          </div>
+        </div>
+        <p>Participez au contrôle et renforcez la pression du groupe.</p>
+
+        <div class="section-title">Clash mêlée</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">Fields</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Champs obscurs"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Karakosa</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Karakosa"></span>
+          </div>
+        </div>
+
+        <div class="section-title">Rotation type</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">Siphon</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Siphon"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Well</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Well of Bounty"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Shadow</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Shadow Sap ×2"></span>
+          </div>
+        </div>
+
+        <div class="section-title">Priorités</div>
+        <ul class="priorities">
+          <li>Utiliser Siphon dès que possible et déclencher Karakosa via les blast finishers.</li>
+          <li>Espacer Well of Bounty et Mind Shock pour couvrir la Stabilité.</li>
+          <li>Ne pas lancer toutes les Wells en même temps.</li>
+        </ul>
+      </section>
+
+      <section class="panel panel-amalgame">
+        <div class="class-title">Power Amalgame</div>
+        <p>Délivre un burst extrêmement puissant pendant les appels du commandant, en alternant préparation et courtes fenêtres où il concentre la majorité de ses dégâts.</p>
+
+        <div class="section-title">Avant l'engage</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">Sigil</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Sigil of Bloodlust"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Charges</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="25 charges"></span>
+          </div>
+        </div>
+        <p>Conservez Thunderclap, Napalm, vos morphs et Evolve pour le prochain push.</p>
+
+        <div class="section-title">Engage</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">Mêlée</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Plasmatic State"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Burst</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Thunderclap + Napalm"></span>
+          </div>
+        </div>
+
+        <div class="section-title">Burst</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">Burst</div>
+            <span class="spell" data-skill-id="3680125" data-skill-name="État de flux"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Obliterate</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Offensive Protocol: Obliterate"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Demolish</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Offensive Protocol: Demolish"></span>
+          </div>
+        </div>
+        <p>N'utilisez jamais Evolve avant vos morphs, sinon vous perdez le principal intérêt.</p>
+
+        <div class="section-title">Entre deux spikes</div>
+        <p>Alternez Marteau, Elixir Gun et Lance-flammes. Electro-whirl dès son retour, Acid Bomb dès disponible, Flame Jet pendant que les gros cooldowns rechargent.</p>
+
+        <div class="section-title">Survie</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">Def</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="A.E.D."></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Shield</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Shock Shield"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Thorns</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Defensive Protocol: Thorns"></span>
+          </div>
+        </div>
+
+        <div class="section-title">Priorités</div>
+        <ul class="priorities">
+          <li>Lancer toujours Plasmatic State avant le burst et synchroniser Thunderclap + Napalm.</li>
+          <li>Concentrer un maximum de dégâts exactement au moment où la squad engage.</li>
+        </ul>
+      </section>
+
+      <section class="panel panel-necro-power">
+        <div class="class-title">Power Necro</div>
+        <p>DPS de mêlée alternant Hache/Focus et Sceptre, orienté retrait de boons et pression constante. Reste au contact du groupe pour cleave les downs et retirer la Stabilité adverse avec les puits.</p>
+
+        <div class="section-title">Engage</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">Hache 2</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Ghastly Claws"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Hache 3</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Unholy Feast"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Sceptre 2</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Grasping Dead"></span>
+          </div>
+        </div>
+
+        <div class="section-title">Appel Puits / Well</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">Well</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Well of Corruption"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Well</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Well of Suffering"></span>
+          </div>
+        </div>
+
+        <div class="section-title">Survie</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">Signet</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Signet of Vampirism"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Locust</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Signet of the Locust"></span>
+          </div>
+        </div>
+
+        <div class="section-title">Priorités</div>
+        <ul class="priorities">
+          <li>Rester en mêlée sur les cibles prioritaires du commandant.</li>
+          <li>Utiliser les puits pour retirer un maximum de boons pendant les spikes.</li>
+          <li>Ne pas s'isoler : cette build dépend du cleave de groupe.</li>
+        </ul>
+      </section>
+
+      <section class="panel panel-necro-reaper">
+        <div class="class-title">Power Reaper</div>
+        <p>DPS de mêlée basé sur l'Épée à deux mains et le Linceul du Faucheur, misant sur le contrôle (peur, immobilisation) et les gros pics de dégâts sur cible isolée ou groupée.</p>
+
+        <div class="section-title">Engage</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">Épée 2</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Gravedigger"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Épée 3</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Death Spiral"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Épée 4</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Nightfall"></span>
+          </div>
+        </div>
+
+        <div class="section-title">Linceul du Faucheur</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">Linceul</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Linceul du Faucheur"></span>
+          </div>
+        </div>
+        <p>Entrez en Linceul dès que le Life Force est suffisant pour prolonger la pression.</p>
+
+        <div class="section-title">Appel Puits / Well</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">Well</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Well of Corruption"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Well</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Well of Suffering"></span>
+          </div>
+        </div>
+
+        <div class="section-title">Priorités</div>
+        <ul class="priorities">
+          <li>Utiliser Nightfall pour peur et contrôle sur les regroupements ennemis.</li>
+          <li>Rentrer en Linceul pendant les fenêtres de spike pour maximiser les dégâts.</li>
+        </ul>
+      </section>
+
+      <section class="panel panel-necro-scourge">
+        <div class="class-title">Power Scourge</div>
+        <p>DPS/utilitaire misant sur les ombres pour infliger des dégâts, retirer des boons et convertir altérations en boons pour le groupe. Gardez toujours au moins une ombre active.</p>
+
+        <div class="section-title">Appel Pull</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">Focus 5</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Grasping Darkness"></span>
+          </div>
+        </div>
+
+        <div class="section-title">Appel Puits / Bomb</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">Well</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Well of Corruption"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Well</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Well of Suffering"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Shade</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Manifest Sand Shade"></span>
+          </div>
+        </div>
+
+        <div class="section-title">Appel Brèche / Nightfall</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">Breach</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Ghastly Breach"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Nightfall</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Death Spiral"></span>
+          </div>
+        </div>
+        <p>Même rotation si le commandant ne l'annonce pas explicitement.</p>
+
+        <div class="section-title">Notes</div>
+        <p><strong>Gravedigger</strong> réinitialise son recharge sur cible sous 50 % de vie ou à terre ; <strong>Garish Pillar</strong> et <strong>Sand Flare</strong> sont utiles pour contrôler la zone.</p>
+
+        <div class="section-title">Priorités</div>
+        <ul class="priorities">
+          <li>Maintenir au moins une ombre active en permanence.</li>
+          <li>Se positionner prudemment pour éviter d'être interrompu.</li>
+          <li>Synchroniser Well of Corruption, Ghastly Breach et Nightfall avec les appels du commandant.</li>
+        </ul>
+      </section>
+
+      <section class="panel panel-dps-warrior">
+        <div class="class-title">DPS Warrior</div>
+        <p>Burst DPS mêlée et distance combinant Lance et Épée/Hache, avec une forte pression via l'adrénaline et le Signet Mastery. S'adapte aussi bien au poke à distance qu'au cleave rapproché.</p>
+
+        <div class="section-title">Préparation</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">Signet</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Healing Signet"></span>
+          </div>
+        </div>
+        <p>Pré-activatez-le avant l'engage pour stacker du Ferocity via Signet Mastery.</p>
+
+        <div class="section-title">Engage (Lance)</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">Lance</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Signet of Might"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Throw</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Disrupting Throw"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Harrier</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Harrier's Toss"></span>
+          </div>
+        </div>
+
+        <div class="section-title">Passage en mêlée</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">Flurry</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Flurry"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Dual</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Dual Strike"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Axe</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Whirling Axe"></span>
+          </div>
+        </div>
+
+        <div class="section-title">Priorités</div>
+        <ul class="priorities">
+          <li>Ouvrir les combats à la Lance, ne passer en mêlée que si la position est sûre.</li>
+          <li>Utiliser <strong>Battle Standard</strong> pour relever ou achever quand le moment est bon.</li>
+        </ul>
+      </section>
+
+      <section class="panel panel-paragon">
+        <div class="class-title">Support Paragon</div>
+        <p>Support de boons pour le Guerrier, basé sur Lance/Épée et les Bannières, fournissant Rapidité, Résistance et soins de groupe réguliers.</p>
+
+        <div class="section-title">Rotation de base</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">Lance 3</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Line Breaker"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Lance 4</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Snap Pull"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Lance 5</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Defiant Roar"></span>
+          </div>
+        </div>
+
+        <div class="section-title">Soutien</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">Soin</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="We Shall Return!"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Banner</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Banner of Tactics"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Brace</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Brace Yourselves!"></span>
+          </div>
+        </div>
+
+        <div class="section-title">Priorités</div>
+        <ul class="priorities">
+          <li>Maintenir la Rapidité et la Résistance du sous-groupe en continu.</li>
+          <li>Utiliser Snap Pull pour resserrer le groupe avant les spikes.</li>
+        </ul>
+      </section>
+
+      <section class="panel panel-vindicator-support">
+        <div class="class-title">Support Vindicator</div>
+        <p>Support de boons pour le Revenant, jouant Masse/Bouclier et Bâton, alternant Légende du Nain et Légende du Démon pour fournir Stabilité, Résistance et soins constants.</p>
+
+        <div class="section-title">Rotation Masse/Bouclier</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">Masse 1</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Manifest Toxin"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Masse 2</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Searing Fissure"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Bouclier 4</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Envoy of Exuberance"></span>
+          </div>
+        </div>
+
+        <div class="section-title">Rotation Bâton</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">Bâton 1</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Rejuvenating Assault"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Bâton 3</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Warding Rift"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Bâton 5</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Surge of the Mists"></span>
+          </div>
+        </div>
+
+        <div class="section-title">Légendes</div>
+        <p><strong>Légende du Nain</strong> : Soothing Stone, Inspiring Reinforcement, Forced Engagement, Vengeful Hammers, Rite of the Great Dwarf. <strong>Légende du Démon</strong> : Empowering Misery, Banish Enchantment, Pain Absorption, Call to Anguish, Embrace the Darkness.</p>
+
+        <div class="section-title">Priorités</div>
+        <ul class="priorities">
+          <li>Alterner les légendes selon le besoin de Stabilité (Nain) ou de retrait de boons ennemis (Démon).</li>
+          <li>Maintenir la Résistance et les soins via le Bâton entre les spikes.</li>
+        </ul>
+      </section>
+
+      <section class="panel panel-druid">
+        <div class="class-title">Heal Druid</div>
+        <p>Support de soin principal du Rôdeur, basé sur le Bâton/Masse et le Célestial Avatar, offrant soins de zone, nettoyage d'altérations et boons de groupe.</p>
+
+        <div class="section-title">Mécanique centrale</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">Avatar</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Célestial Avatar"></span>
+          </div>
+        </div>
+        <p>Entrez en Avatar au moment critique pour bénéficier des soins et nettoyages puis sortez dès que le besoin a été couvert.</p>
+
+        <div class="section-title">Rotation</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">Bâton 1</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Solar Beam"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Bâton 2</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Astral Wisp"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Masse</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Mightification"></span>
+          </div>
+        </div>
+
+        <div class="section-title">Soutien</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">Healing</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Healing Spring"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Spirit</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Frost Spirit"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Spirit</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Spirit of Nature"></span>
+          </div>
+        </div>
+
+        <div class="section-title">Priorités</div>
+        <ul class="priorities">
+          <li>Utiliser le Célestial Avatar dans les moments critiques, pas en continu.</li>
+          <li>Combo les champs d'eau pour maximiser les soins.</li>
+          <li>Garder Spirit of Nature pour les relèves de groupe décisives.</li>
+        </ul>
+      </section>
+
+      <section class="panel panel-chronomancer">
+        <div class="class-title">Support Chronomancer</div>
+        <p>Support principal de l'Envoûteur, fournissant Stabilité, Rapidité et soins via les Mantras et les Shatters, avec une forte mitigation de dégâts grâce à Distortion.</p>
+
+        <div class="section-title">Préparation</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">Mantra</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Mantra of Concentration"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Fusil 2</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Journey"></span>
+          </div>
+        </div>
+        <p>Chargez Mantra of Concentration avant le push et utilisez Fusil 2 pour Régénération / Chaotic Persistence.</p>
+
+        <div class="section-title">Engage</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">Push</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Mantra of Concentration"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Shatters</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="F1-F3"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Fusil 5</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Singularity Shot"></span>
+          </div>
+        </div>
+
+        <div class="section-title">Appel Puits / Bomb</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">F5</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Continuum Split"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">F4</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Distortion"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Cycle</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="F1 → F2 → F3"></span>
+          </div>
+        </div>
+
+        <div class="section-title">Mitigation en mêlée</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">Bouclier 4</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Echo of Memory"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Bouclier 5</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Tides of Time"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Épée 2</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Blurred Frenzy"></span>
+          </div>
+        </div>
+
+        <div class="section-title">Priorités</div>
+        <ul class="priorities">
+          <li>Maintenir la Stabilité en priorité absolue.</li>
+          <li>Se positionner sur ou légèrement devant le commandant pour absorber les dégâts avec Distortion.</li>
+          <li>Ne pas gaspiller Continuum Split hors des appels de bomb.</li>
+        </ul>
+      </section>
+
+      <section class="panel panel-scrapper">
+        <div class="class-title">Heal Scrapper</div>
+        <p>Support de soin de l'Ingénieur, basé sur l'Arc court et les kits (Med Kit, Elixir Gun), excellent pour le nettoyage d'altérations, la conversion en boons et le Superspeed de groupe.</p>
+
+        <div class="section-title">Rotation Elixir Gun</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">Fumigate</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Fumigate"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Elixir</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Super Elixir"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Bomb</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Acid Bomb"></span>
+          </div>
+        </div>
+
+        <div class="section-title">Rotation Med Kit</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">Bandage</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Bandage Blast"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Field</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Cleansing Field"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Bomb</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Infusion Bomb"></span>
+          </div>
+        </div>
+
+        <div class="section-title">Arc court (Might stacking)</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">Essence</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Living Shadows"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Essence</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Liquid Wrath"></span>
+          </div>
+        </div>
+
+        <div class="section-title">Astuces</div>
+        <p><strong>Purge Gyro</strong> pour nettoyer les altérations sous pression, <strong>Function Gyro</strong> pour des blast finishers supplémentaires, et la Relique de Karakosa combinée aux blasts pour un soin de groupe important.</p>
+
+        <div class="section-title">Priorités</div>
+        <ul class="priorities">
+          <li>Garder Med Blaster actif en continu pour un soin constant.</li>
+          <li>Utiliser Purge Gyro dès que le groupe traverse une zone de pression ennemie.</li>
+          <li>Blast les champs pour maximiser might, soin et boons.</li>
+        </ul>
+      </section>
+
+    </div>
+  </div>
+
+  <script>
+    // Récupère nom + icône des sorts (spans .spell[data-skill-id]) via l'API officielle GW2.
+    (function () {
+      var spans = Array.prototype.slice.call(document.querySelectorAll('.spell[data-skill-id]'));
+      var ids = Array.from(new Set(spans.map(function (s) { return s.dataset.skillId; })));
+      if (!ids.length) return;
+
+      // Affiche le nom tout de suite (sans icône) le temps que l'API réponde.
+      spans.forEach(function (span) {
+        span.textContent = span.dataset.skillName || ('Sort #' + span.dataset.skillId);
+      });
+
+      var chunkSize = 200; // limite raisonnable par requête à l'API
+      var chunks = [];
+      for (var i = 0; i < ids.length; i += chunkSize) {
+        chunks.push(ids.slice(i, i + chunkSize));
+      }
+
+      function renderSpan(span, name, iconUrl) {
+        span.textContent = '';
+        if (iconUrl) {
+          var img = document.createElement('img');
+          img.className = 'spell-icon';
+          img.src = iconUrl;
+          img.alt = name;
+          span.appendChild(img);
+        }
+        span.appendChild(document.createTextNode(name));
+      }
+
+      Promise.all(
+        chunks.map(function (chunk) {
+          return fetch('https://api.guildwars2.com/v2/skills?ids=' + chunk.join(',') + '&lang=fr')
+            .then(function (res) { return res.ok ? res.json() : []; })
+            .catch(function () { return []; });
+        })
+      ).then(function (results) {
+        var skillsById = {};
+        results.forEach(function (list) {
+          list.forEach(function (skill) { skillsById[skill.id] = skill; });
+        });
+
+        spans.forEach(function (span) {
+          var skill = skillsById[span.dataset.skillId];
+          var fallbackName = span.dataset.skillName || ('Sort #' + span.dataset.skillId);
+          if (skill) {
+            renderSpan(span, skill.name || fallbackName, skill.icon);
+          } else {
+            renderSpan(span, fallbackName, null);
+          }
+        });
+      });
+    })();
+  </script>
+</body>
+
+</html>

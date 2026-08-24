@@ -1,0 +1,1802 @@
+Comment jouer Support Harbinger (Augure)
+Le Support Harbinger (Augure) est un support offensif dont le rôle principal est de fournir Quickness (Célérité), Might (Pouvoir) et Fury (Fureur), tout en participant activement aux strips de boons lors des spikes du commandant.
+
+ Votre objectif est de chaîner un maximum de corruptions dans une courte fenêtre afin de retirer les avantages ennemis avant le burst du groupe.
+
+ Les appels Bomb, Well, Breach et Nightfall utilisent quasiment la même rotation. Lancez simplement la compétence annoncée par le commandant puis poursuivez votre enchaînement habituel.
+
+━━━━━━━━━━━━━━━━━━
+
+ Appel Pull (Grab)
+ Espadon 5 - Nocturne crochu
+
+À utiliser lorsque le commandant annonce un pull afin de regrouper les ennemis avant le spike.
+
+━━━━━━━━━━━━━━━━━━
+
+ Engage / Push
+ 0 - Élixir d'ambition
+
+À utiliser au début du push afin de renforcer les capacités offensives du groupe.
+
+━━━━━━━━━━━━━━━━━━
+
+ Appel Bomb / Puits (Well)
+ 8 - Puits de corruption → 6 - Signe de vampirisme → Espadon 3 - Spirale mortelle → F1 - Linceul de l'Augure → Linceul 5 - Puisage vital → Linceul 4 - Arc vorace → Linceul 2 - Barrage noir → Linceul 1 - Éclairs corrompus
+
+ Restez en Linceul jusqu'à avoir au moins 10 secondes de Quickness (Célérité). 
+[PSY] Jalyde | Yordan.7420
+OP
+ — 08-06-26 12:25
+ Appel Breach (Brèche)
+ 0 - Brèche spectrale → 6 - Signe de vampirisme → Espadon 3 - Spirale mortelle → F1 - Linceul de l'Augure → Linceul 5 - Puisage vital → Linceul 4 - Arc vorace → Linceul 2 - Barrage noir → Linceul 1 - Éclairs corrompus
+
+ L'objectif est de concentrer un maximum de corruptions pendant la fenêtre de spike.
+
+━━━━━━━━━━━━━━━━━━
+
+ Appel Nightfall
+ Espadon 4 - Nightfall (Tombée de la nuit) → 6 - Signe de vampirisme → Espadon 3 - Spirale mortelle → F1 - Linceul de l'Augure → Linceul 5 - Puisage vital → Linceul 4 - Arc vorace → Linceul 2 - Barrage noir → Linceul 1 - Éclairs corrompus
+
+ Si le commandant ne l'annonce pas, utilisez Nightfall lorsque vous jugez l'opportunité intéressante.
+
+━━━━━━━━━━━━━━━━━━
+
+ Priorités
+ Maintenir la Quickness (Célérité) du groupe.
+
+ Synchroniser 8 - Puits de corruption, 0 - Brèche spectrale et Espadon 4 - Nightfall avec les appels du commandant.
+
+ Participer activement aux strips de boons.
+
+ Utiliser Espadon 5 - Nocturne crochu sur les appels de pull.
+
+ Ne pas gaspiller les gros cooldowns hors spike.
+
+ Ne pas quitter le Linceul trop tôt. 
+[PSY] Jalyde | Yordan.7420
+OP
+ — 08-06-26 14:41
+ Comment jouer Support Troubadour
+Le Support Troubadour est un support principal chargé de fournir Stabilité, Célérité, Résistance, soins et barrières à son groupe.
+
+ Votre objectif est de maintenir votre sous-groupe en vie tout en assurant une couverture maximale de Stabilité pendant les engagements.
+
+ Contrairement à d'autres supports, le Troubadour fonctionne principalement sur la gestion de ses Notes et l'utilisation intelligente de ses compétences de soutien.
+
+━━━━━━━━━━━━━━━━━━
+
+ Pré-stack
+ Fusil 2 - Transmigration
+
+ F1 - Luth Entraînant
+
+ Maintenez Régénération active afin de profiter de Chaotic Persistence.
+
+━━━━━━━━━━━━━━━━━━
+
+ Engage
+ Fusil 4 - Tireur Fantasmagorique
+
+ 9 - Conte de l'Honorable Fripouille si la Stabilité n'est pas couverte.
+
+ 7 - Mantra de Concentration pour prolonger la durée de Stabilité si nécessaire.
+
+ Dans la plupart des groupes organisés, la Stabilité et le Superspeed sont généralement fournis par le Luminary.
+
+━━━━━━━━━━━━━━━━━━
+
+ Gestion des Notes
+ Fusil 2 - Transmigration
+
+ Fusil 4 - Tireur Fantasmagorique
+
+ Épée 3 - Bond Illusoire
+
+ Essayez toujours d'avoir au moins 1 Note avant d'utiliser :
+
+ F1 - Luth Entraînant
+
+ F2 - Flûte Troublante
+
+ F3 - Tambour Assourdissant
+
+ F4 - Harpe Harmonieuse
+
+Chaque Note consommée réduit également le temps de recharge de F5 - Crescendo.
+ Soutien
+ Double activation de Fusil 3 - Imagerie Inspirante pour un important burst heal.
+
+ Fusil 2 - Transmigration dès que disponible.
+
+ Fusil 5 - Tir de Singularité pour les barrières et la Résistance.
+
+ Spammez Effervescence en filler.
+
+ F5 - Crescendo
+
+ F1 - Luth Entraînant
+
+ F4 - Harpe Harmonieuse
+
+Ces compétences constituent le cœur de votre soutien.
+
+━━━━━━━━━━━━━━━━━━
+
+ Mitigation
+ Bouclier 4 - Écho Mnémonique → Déjà-vu
+
+ Épée 2 - Brume Frénétique
+
+ F4 - Harpe Harmonieuse
+
+ 0 - Conte de la Reine Auguste
+
+ Votre compétence défensive la plus importante.
+
+Elle accorde Distorsion à tout le groupe et permet d'annuler de nombreux spikes ennemis ou puits adverses.
+
+━━━━━━━━━━━━━━━━━━
+
+ Priorités
+ Maintenir la Stabilité.
+
+ Générer des Notes en permanence.
+
+ Utiliser F1 à F4 avec au moins une Note.
+
+ Réduire le temps de recharge de F5 - Crescendo.
+
+ Fournir soins, barrières et Résistance.
+
+ Utiliser Conte de la Reine Auguste sur les gros spikes ennemis.
+
+ Rester proche du commandant.
+
+ Ne pas utiliser Conte de la Reine Auguste inutilement.
+
+ Ne pas gaspiller vos Notes.
+
+ Ne pas utiliser F1 à F4 sans Note lorsque cela peut être évité.
+[PSY] Jalyde | Yordan.7420
+OP
+ — 08-06-26 15:31
+ Comment jouer Power Guardian
+Le Power Guardian est un DPS orienté burst dont le rôle est de générer un maximum de dégâts pendant les spikes afin de mettre rapidement les ennemis à terre.
+
+ L'objectif n'est pas d'avoir le plus gros DPS global, mais de concentrer un maximum de dégâts dans une courte fenêtre lorsque le commandant engage.
+
+━━━━━━━━━━━━━━━━━━
+
+ Appel Pull
+ 5 Arc Long - Protection du chasseur
+
+À utiliser lorsque le commandant annonce un pull afin d'empêcher les ennemis de s'échapper.
+
+ Cette compétence est également très importante lors des appels Well of Corruption.
+
+━━━━━━━━━━━━━━━━━━
+
+ Engage / Push
+Commencez toujours le combat à l'Arc Long.
+
+Pendant cette phase :
+
+ Utilisez 1 - Tir perforateur pour maintenir la pression.
+
+ Utilisez 2 - Tir infaillible sur les ennemis isolés ou déjà contrôlés.
+
+ Jouez de manière défensive jusqu'au call du commandant.
+
+Lorsque le push est annoncé :
+
+ Passez sur votre Lance.
+
+ Préparez votre burst.
+
+━━━━━━━━━━━━━━━━━━
+
+ Burst Arc Long
+Votre burst principal à distance est :
+
+ 4 - Symbole d'énergie
+
+ 5 - Protection du chasseur
+
+ 2 - Tir infaillible
+
+ Essayez de cibler :
+
+• Les joueurs isolés.
+• Les retardataires.
+• Les ennemis contrôlés.
+
+ Vérifiez toujours l'absence de renvois de projectiles avant d'utiliser Tir infaillible.
+
+━━━━━━━━━━━━━━━━━━
+
+ À retenir
+
+ 4 → 5 → 2
+
+ Burst principal de l'Arc Long.
+ Rotation Lance
+Une fois le push engagé :
+
+ 5 - Symbole de brillance
+
+ 3 - Disque rutilant
+
+ 4 - Tempête solaire
+
+ 1 - Taillade de l'aube
+
+ Taillade de l'aube représente la majorité de votre DPS.
+
+ Évitez d'interrompre inutilement votre chaîne d'auto-attaque.
+
+ Disque rutilant et Tempête solaire deviennent particulièrement puissants lorsque votre Symbole est actif.
+
+━━━━━━━━━━━━━━━━━━
+
+ À retenir
+
+ 5 → 3 → 4 → 1
+
+ Burst principal de la Lance.
+
+━━━━━━━━━━━━━━━━━━
+
+ Spike Well of Corruption
+Lorsqu'un Well of Corruption est annoncé :
+
+ Arc Long
+
+ 4 - Symbole d'énergie
+
+ 5 - Protection du chasseur
+
+ Passage Lance
+
+ F1 - Vertu de justice
+
+ 5 - Symbole de brillance
+
+ 3 - Disque rutilant
+
+ 4 - Tempête solaire
+
+ 1 - Taillade de l'aube
+
+ Continuez ensuite à cleave les ennemis à terre avec votre Lance.
+
+━━━━━━━━━━━━━━━━━━
+
+ À retenir
+
+ 4 → 5 → Swap → F1 → 5 → 3 → 4 → 1
+
+ Rotation principale sur les appels Well.
+ Défense
+ F3 - Vertu de courage
+
+Votre principal bouton défensif.
+
+• Brise-étourdissement.
+• Égide.
+• Protection.
+
+ 7 - Tenez bon !
+
+• Stabilité.
+• Brise-étourdissement supplémentaire.
+
+ 6 - Refuge
+
+• Bloque toutes les attaques.
+• Vous soigne à la fin du canal.
+
+ 0 - Regain de concentration
+
+• Invulnérabilité.
+• Réinitialise toutes vos Vertus.
+
+ Utilisez-le pour récupérer une Vertu de courage supplémentaire lorsque la situation devient critique.
+
+━━━━━━━━━━━━━━━━━━
+
+ Priorités
+ Avant le push
+
+ 4 → 5 → 2
+
+ Pendant le push
+
+ 5 → 3 → 4 → 1
+
+ Well Spike
+
+ 4 → 5 → Swap → F1 → 5 → 3 → 4 → 1
+
+━━━━━━━━━━━━━━━━━━
+
+ Résumé Express
+ F1 = Burst
+
+ F2 = Nettoyage
+
+ F3 = Survie
+
+ Arc Long avant le push.
+
+ Lance pendant le push.
+
+ Taillade de l'aube est votre principale source de dégâts.
+
+ Protection du chasseur est votre principal contrôle.
+[PSY] Jalyde | Yordan.7420
+OP
+ — 09-06-26 10:23
+ Comment jouer Power Untamed
+Le Power Untamed est un DPS mêlée dont le rôle est de générer un maximum de dégâts pendant les spikes tout en retirant des avantages grâce aux compétences déchaînées.
+
+ Votre objectif est de préparer votre burst à distance avec la Lance puis de suivre immédiatement l'impact du commandant afin de sécuriser rapidement des downs.
+
+ La majorité de vos dégâts sont concentrés pendant les appels de spike. Évitez de gaspiller vos compétences importantes entre deux engagements.
+
+━━━━━━━━━━━━━━━━━━
+
+ Appel Pull
+ Lien de la nature
+
+À utiliser lorsque le commandant annonce un grab ou un pull.
+
+L'objectif est d'immobiliser les joueurs ennemis qui auraient perdu leur Stabilité afin de faciliter le spike du groupe.
+
+━━━━━━━━━━━━━━━━━━
+
+ Engage
+Restez à la Lance avant le premier impact.
+
+ Maraude de la Panthère
+
+ Vol du Hibou
+
+Cette combinaison permet d'envoyer un premier burst à distance tout en restant relativement en sécurité avant l'entrée en mêlée.
+
+━━━━━━━━━━━━━━━━━━
+
+ Appel Puit / Well
+Lorsque le commandant annonce le spike :
+
+ Déchaîner le familier
+
+ Explosion venimeuse
+
+ Lianes lacérantes
+
+ Brume enveloppante
+
+ Déchaîner le rôdeur
+
+ Battage du drake
+
+ Engagement du razziafelis
+
+Vous utilisez ici toutes vos compétences déchaînées afin d'appliquer un maximum de pression et de retrait d'avantages avant l'impact principal. 
+━━━━━━━━━━━━━━━━━━
+
+ Burst mêlée
+Après votre approche à la Lance :
+
+ Lien de la nature
+
+ Spores explosives
+
+ Swap Espadon
+
+ Entaille (Ambush)
+
+ Mutiler
+
+ Auto-attaques
+
+ Mutiler
+
+ L'objectif est de générer rapidement des downs pendant la fenêtre de burst du commandant.
+
+Si la situation le permet, vous pouvez utiliser Coup de manche pour placer un contrôle supplémentaire et sécuriser davantage vos dégâts.
+
+━━━━━━━━━━━━━━━━━━
+
+ Entre deux spikes
+Une fois votre rotation Espadon terminée :
+
+ Retour Lance
+
+ Frénésie de la Mangouste
+
+ Engagement du razziafelis
+
+ Maraude de la Panthère
+
+ Vol du Hibou
+
+Continuez à maintenir la pression jusqu'au prochain appel du commandant.
+
+━━━━━━━━━━━━━━━━━━
+
+ Défense
+Priorité de survie :
+
+ Don périlleux
+
+ Fortification de la forêt
+
+ Sceau de pierre (si équipé)
+
+ Mutation des altérations est votre unique brise-étourdissement. Évitez de l'utiliser inutilement.
+
+Plongeon, Engagement du razziafelis et Contre-attaque permettent également d'éviter ou d'absorber une partie des dégâts ennemis.
+
+━━━━━━━━━━━━━━━━━━
+
+ Priorités
+• Rester en Déchaîner le rôdeur la majorité du temps.
+• Utiliser Déchaîner le familier dès que F1, F2 et F3 sont disponibles.
+• Utiliser Maraude de la Panthère → Vol du Hibou dès que possible.
+• Conserver Lien de la nature pour les spikes.
+• Prioriser Mutiler pendant les phases de mêlée.
+• Toujours suivre le commandant et rester avec le groupe.
+[PSY] Jalyde | Yordan.7420
+OP
+ — 09-06-26 11:12
+ Comment jouer Power Evoker
+Le Power Evoker est un DPS à distance dont le rôle est de générer un maximum de pression pendant les spikes du commandant afin de créer des downs et de les cleave rapidement.
+
+ Votre objectif n'est pas de suivre une rotation parfaite, mais de placer vos Gravures, vos Météores et vos Volcanos au bon endroit et au bon moment.
+
+ Les appels Engage, Push, Bomb et Puit utilisent quasiment la même logique. Il faut simplement adapter le placement de vos zones à la position de l'ennemi.
+
+━━━━━━━━━━━━━━━━━━
+
+ Début de combat
+Commencez toujours en Affinité Air.
+
+ Gravure : Derecho (Etching: Derecho)
+
+ Tournoiement (Twister)
+
+ Fulguration (Fulgor)
+
+ Alimentation (Energize)
+
+ Derecho
+
+ Cette ouverture permet :
+
+• De retirer rapidement les Égides ennemies.
+• D'appliquer du contrôle à distance.
+• De préparer le burst Feu.
+• De commencer à générer de la pression avant le spike principal.
+
+━━━━━━━━━━━━━━━━━━
+
+ Appel Puit / Spike
+Passez immédiatement en Affinité Feu.
+
+ Gravure : Volcan (Etching: Volcano)
+
+ Bouillonnement (Seethe)
+
+ Écho des arcanes (Arcane Echo)
+
+ Météore (Meteor)
+
+ Volcano
+
+ Météore
+
+ Barrage flamboyant (Blazing Barrage)
+
+ C'est votre plus grosse fenêtre de dégâts.
+
+ Ne lancez pas Météore ou Volcano sur un groupe qui est en train de se déplacer.
+
+Soyez patient.
+
+Mieux vaut retarder un sort d'une seconde que le lancer dans le vide.
+ Suivi du burst
+Après votre phase Feu, passez en Affinité Terre.
+
+ Gravure : Haboob (Etching: Haboob)
+
+ Durcissement (Harden)
+
+ Fissure (Fissure)
+
+ Lance de terre (Earthen Spear)
+
+ Haboob
+
+ Terre est l'affinité qui transforme souvent la pression en downs.
+
+La combinaison :
+
+Durcissement + Fissure + Haboob + Volcano
+
+génère énormément de dégâts sur les ennemis déjà sous pression.
+
+━━━━━━━━━━━━━━━━━━
+
+ Repositionnement
+Passez ensuite en Affinité Eau.
+
+ Gravure : Jökulhlaup (Etching: Jökulhlaup)
+
+ Ondulation (Ripple)
+
+ Reflux (Undertow)
+
+ Rayon de glace (Ice Beam)
+
+ Jökulhlaup
+
+ L'affinité Eau sert principalement à :
+
+• Vous repositionner.
+• Attendre le retour des gravures.
+• Contrôler les ennemis.
+
+ Faites attention à la direction de Ondulation.
+
+La plupart du temps, utilisez-la à vos pieds ou légèrement vers l'arrière afin d'éviter de vous projeter dans une mauvaise position.
+
+Reflux est un excellent pull permettant d'extraire des joueurs du groupe ennemi.
+ Priorités
+ Terminer vos gravures.
+
+ Utiliser Zap dès que possible.
+
+ Aligner Météore avec les appels Puit / Spike.
+
+ Toucher les mêmes cibles que le reste du raid.
+
+ Garder vos distances.
+
+━━━━━━━━━━━━━━━━━━
+
+ Adaptation du burst
+Vous pouvez utiliser Bouillonnement (Seethe) de deux façons :
+
+ Volcano
+
+Si l'ennemi reste statique longtemps.
+
+Vous maximiserez les dégâts continus.
+
+ Météore
+
+Si l'ennemi bouge beaucoup ou possède de gros soins.
+
+Vous chercherez davantage à générer des downs immédiats.
+
+━━━━━━━━━━━━━━━━━━
+
+ Erreurs à éviter
+ Lancer Météore sur un groupe en mouvement.
+
+ Poser une gravure puis quitter la zone sans la terminer.
+
+ Utiliser Eau trop longtemps.
+
+ Jouer trop près de la mêlée.
+
+ Chercher une rotation parfaite au lieu de suivre les déplacements du commandant.
+
+ Un bon Evoker n'est pas celui qui suit un cycle parfait.
+
+C'est celui qui place correctement ses gravures et ses zones de dégâts là où le commandant engage.
+[PSY] Jalyde | Yordan.7420
+OP
+ — 09-06-26 13:17
+ Comment jouer Power Spellbreaker
+Le Power Spellbreaker est un DPS utilitaire dont le rôle est de retirer les avantages ennemis tout en infligeant un maximum de dégâts pendant les spikes du commandant.
+
+ Votre objectif est de synchroniser vos dégâts avec les corruptions des Augures, Nécromants et Fléaux afin de transformer rapidement les spikes en downs.
+
+ Les appels Bomb, Well, Breach et Nightfall utilisent quasiment la même rotation.
+
+━━━━━━━━━━━━━━━━━━
+
+ Préparation
+Avant l'engage :
+
+ Utilisez Lance estropiante dans les champs de feu afin de générer du Pouvoir.
+
+ Passez ensuite sur Bâton.
+
+ Cela permet d'arriver sur le premier impact avec davantage de statistiques offensives.
+
+━━━━━━━━━━━━━━━━━━
+
+ Appel Pull
+ Brise-ligne
+
+Permet de rejoindre rapidement l'engage.
+
+ Attraction provoquée
+
+À utiliser lorsque le commandant annonce un pull afin d'ajouter un regroupement supplémentaire.
+
+ Rugissement de défi
+
+Ajoute du contrôle sur les ennemis regroupés.
+
+ Votre rôle est d'aider à maintenir les ennemis dans les zones de dégâts du groupe.
+ Engage
+Lorsque le commandant engage :
+
+ Bond vaillant
+
+Génère Pouvoir et Fureur.
+
+ Brise-ligne
+
+Permet de rester au contact du groupe.
+
+ Lancer perturbateur
+
+Ajoute du contrôle et prépare le burst.
+
+━━━━━━━━━━━━━━━━━━
+
+ Appel Well / Bomb / Breach / Nightfall
+Commencez toujours sur Lance.
+
+ Signe de pouvoir
+
+ Assistance du maréchal de la lance
+
+ Lancer du circaète
+
+ Lance estropiante
+
+ Briser les enchantements
+
+ Riposte totale
+
+ Lancer du circaète
+
+ Grâce à Riposte totale, votre compétence d'adrénaline est réinitialisée et peut être utilisée une seconde fois pendant le spike.
+
+ Utilisez toujours Signe de pouvoir avant votre burst afin de rendre vos attaques impossibles à bloquer.
+ Pendant le combat
+Une fois votre burst effectué :
+
+ Passez sur Bâton
+
+ Bond vaillant
+
+ Brise-ligne
+
+ Rugissement de défi
+
+ Retour sur Lance dès que votre prochain burst est disponible.
+
+━━━━━━━━━━━━━━━━━━
+
+ Riposte totale
+Riposte totale est la mécanique principale du Brisesort.
+
+ Essayez de l'utiliser lorsque vous allez recevoir des dégâts.
+
+Une Riposte totale réussie :
+
+• inflige des dégâts
+• applique du contrôle
+• réinitialise Lancer du circaète
+
+Plus vous réussissez de Ripostes totales, plus votre burst augmente.
+
+━━━━━━━━━━━━━━━━━━
+
+ Erreurs à éviter
+ Utiliser Signe de pouvoir hors burst.
+
+ Utiliser Briser les enchantements sur quelques cibles isolées.
+
+ Utiliser Riposte totale sans risque d'être frappé.
+
+ Rester trop longtemps sur le Bâton.
+
+ Courir après les ennemis hors du groupe.
+
+ Un bon Brisesort accompagne toujours les appels du commandant et synchronise ses dégâts avec le reste du raid.
+[PSY] Jalyde | Yordan.7420
+OP
+ — 09-06-26 14:09
+ Comment jouer Power Dragonhunter
+Le Power Dragonhunter est un DPS de burst dont le rôle est de concentrer un maximum de dégâts pendant les spikes afin de générer rapidement des downs.
+
+ Votre objectif n'est pas d'avoir le plus gros DPS du combat mais de faire le plus de dégâts possible lorsque le commandant engage.
+
+ Un Dragonhunter qui suit les appels du commandant aura toujours plus d'impact qu'un Dragonhunter qui cherche à optimiser sa rotation tout seul.
+
+━━━━━━━━━━━━━━━━━━
+
+ Appel Pull
+ F1 - Lance de justice
+
+Utilisez-la lorsque le commandant annonce un pull.
+
+ Utilisez ensuite Taillade de l'aube sur les ennemis regroupés afin d'aider à sécuriser les downs.
+
+ Vous pouvez également utiliser Lance de justice avant qu'un groupe ennemi ne passe sous un Veil afin de révéler une cible et sa position.
+
+━━━━━━━━━━━━━━━━━━
+
+ Avant l'Engage
+Tant que le commandant n'a pas encore push :
+
+ Symbole d'énergie
+
+ Protection du chasseur
+
+ Tir infaillible
+
+Restez avec le groupe et appliquez une pression constante à distance.
+
+ Ne vous avancez jamais seul pour essayer de placer un Tir infaillible.
+ Appel Puit / Well
+Lorsque le commandant annonce un Puit :
+
+ Épreuve de foi
+
+ Procession de lames
+
+ Passez sur la Lance
+
+ Symbole de brillance
+
+ Tempête solaire
+
+ Disque rutilant
+
+ Ruée solaire
+
+ Taillade de l'aube
+
+ L'objectif est que vos pièges et votre burst de Lance frappent exactement au même moment que les Wells du groupe.
+
+━━━━━━━━━━━━━━━━━━
+
+ Appel Brèche
+La rotation est identique :
+
+ Épreuve de foi
+
+ Procession de lames
+
+ Symbole de brillance
+
+ Tempête solaire
+
+ Disque rutilant
+
+ Ruée solaire
+
+ Taillade de l'aube
+
+ Essayez de rester dans votre Symbole de brillance afin de bénéficier des versions Incandescentes de vos compétences.
+
+━━━━━━━━━━━━━━━━━━
+
+ Entre deux engages
+ Revenez sur l'Arc Long.
+
+ Continuez à utiliser Tir infaillible lorsque l'occasion se présente.
+
+ Utilisez Protection du chasseur pour gêner les déplacements ennemis.
+ Défense et Survie
+Refuge
+ À utiliser pour bloquer un spike ennemi ou survivre sous pression.
+
+Bouclier du courage
+ Votre principal outil défensif.
+
+ Utilisez-le lorsque le groupe ennemi bombe votre position.
+
+Ailes de la résolution
+ Permet de suivre un push ou de vous repositionner rapidement.
+
+ Peut également Immobiliser les ennemis.
+
+Regain de concentration
+ Vous rend invulnérable.
+
+ Réinitialise vos vertus.
+
+ Très utile pour récupérer un nouveau Bouclier du courage.
+
+━━━━━━━━━━━━━━━━━━
+
+ Priorités
+ Suivre le commandant
+
+ Jouer Arc Long avant les engages
+
+ Poser les pièges sur les appels Puit et Brèche
+
+ Utiliser Protection du chasseur pour empêcher les ennemis de fuir
+
+ Combattre dans votre Symbole de brillance
+
+ Utiliser Bouclier du courage lors des spikes ennemis
+
+━━━━━━━━━━━━━━━━━━
+
+ Erreurs à éviter
+ Utiliser Ruée solaire pour partir seul
+
+ Poser les pièges hors des appels du commandant
+
+ Quitter son Symbole de brillance trop tôt
+
+ Poursuivre des ennemis loin du groupe
+
+ Garder Bouclier du courage sans jamais l'utiliser
+
+ Un bon Dragonhunter transforme chaque engage du groupe en downs grâce à ses contrôles, ses pièges et son burst.
+[PSY] Jalyde | Yordan.7420
+OP
+ — 15-06-26 09:59
+ Comment jouer Support Luminary
+Le Support Luminary est le support principal chargé de maintenir son sous-groupe en vie grâce à la Stabilité, la Protection, la Résistance et l'Égide.
+
+ Votre rôle principal est de sécuriser les mouvements du commandant afin que votre groupe puisse engager, bomber et se repositionner sans être interrompu par les contrôles ennemis.
+
+ Un Luminary efficace anticipe les dégâts et les contrôles ennemis. Votre objectif n'est pas de remonter les barres de vie mais d'empêcher votre groupe de subir la pression adverse.
+
+━━━━━━━━━━━━━━━━━━
+
+ Préparation
+Avant le combat :
+
+ Bâton 3 - Symbole de rapidité
+
+Permet de maintenir la Rapidité sur le groupe avant les déplacements.
+
+ Évitez de le lancer directement sur le stack Pouvoir.
+
+━━━━━━━━━━━━━━━━━━
+
+ Stack Pouvoir
+Avant l'engage :
+
+ Bâton 2 - Frappe sacrée
+
+ Forge 2 - Marteau stupéfiant
+
+ Bâton 4 - Pleins pouvoirs
+
+Vous apportez du Pouvoir, du soin et préparez votre groupe au premier impact.
+
+━━━━━━━━━━━━━━━━━━
+
+ Appel Pull (Grab)
+Lorsque le commandant annonce un pull :
+
+ Bâton 3 - Symbole de rapidité sur les ennemis
+
+Cela retire les Égides adverses afin que les contrôles et dégâts de votre groupe puissent toucher efficacement.
+
+ Ne vous surexposez pas. Restez toujours proche de votre sous-groupe.
+ Appel Engage / Push
+Juste avant l'impact :
+
+ Utilitaire - Tenez bon !
+
+ Bouclier 4 - Bouclier du jugement
+
+Placez-vous légèrement devant votre groupe afin que le cône touche un maximum d'alliés.
+
+ Masse 2 - Symbole de foi
+
+ F1 - Justice rayonnante
+
+Vous apportez Stabilité, Égide, Protection et soins avant le contact.
+
+━━━━━━━━━━━━━━━━━━
+
+ Rotation Forge Radieuse
+Une fois le contact établi :
+
+ F3 - Détermination rayonnante
+
+ F2 - Courage rayonnant
+
+ 3 - Lueur restauratrice
+
+ 2 - Marteau stupéfiant
+
+ 2 - Vrille éclatante
+
+ 5 - Rempart rayonnant
+
+ 5 - Impact brillant
+
+Cette rotation fournit :
+
+•  Stabilité
+•  Protection
+•  Résistance
+•  Soins
+•  Contrôle
+
+━━━━━━━━━━━━━━━━━━
+
+ Appel Puits (Well)
+ Tenez bon !
+
+ F2 - Courage rayonnant
+
+ Rotation Forge complète
+
+ Sol consacré si une forte pression est attendue.
+
+Votre priorité est de maintenir la Stabilité malgré les corruptions et strips ennemis.
+ Appel Brèche (Breach)
+ F1 - Justice rayonnante
+
+ F2 - Courage rayonnant
+
+ Rotation Forge complète
+
+ Posture valeureuse si vous devez prolonger votre couverture de Stabilité.
+
+━━━━━━━━━━━━━━━━━━
+
+ Appel Nightfall
+ F2 - Courage rayonnant
+
+ 5 - Rempart rayonnant
+
+ 5 - Impact brillant
+
+ 3 - Lueur restauratrice
+
+Conservez vos outils défensifs pour absorber le contre-spike ennemi.
+
+━━━━━━━━━━━━━━━━━━
+
+ Astuces avancées
+ Les compétences de Forge réduisent les temps de recharge de vos F1 à F3. Utilisez-les régulièrement.
+
+ Lancez Justice rayonnante, Courage rayonnant ou Détermination rayonnante avant les compétences de Forge afin d'améliorer leurs effets.
+
+ Bouclier 5 - Bouclier d'absorption est excellent pour repousser les ennemis qui tentent de relever un allié à terre.
+
+ Évitez de superposer inutilement plusieurs sources de Stabilité. Répartissez-les afin de conserver une couverture plus longue.
+
+━━━━━━━━━━━━━━━━━━
+
+ Priorités
+ Maintenir la Stabilité.
+
+ Utiliser Courage rayonnant sur chaque mouvement important.
+
+ Utiliser Détermination rayonnante dès que possible.
+
+ Utiliser Lueur restauratrice pendant les spikes.
+
+ Garder Rempart rayonnant pour les moments dangereux.
+
+ Un excellent Luminary protège son groupe avant qu'il ne subisse les dégâts.
+[PSY] Jalyde | Yordan.7420
+OP
+ — 15-06-26 10:39
+ Comment jouer Support Firebrand
+Le Support Firebrand est le principal fournisseur de Stabilité, Aegis et Résistance du sous-groupe.
+
+ Votre objectif n'est pas de faire des dégâts.
+
+Votre rôle est de permettre au groupe :
+
+• d'avancer sans être contrôlé
+• de traverser les bombs ennemies
+• de survivre aux pushes adverses
+• de maintenir la pression sans interruption
+
+━━━━━━━━━━━━━━━━━━
+
+ Préparation
+Avant le combat :
+
+ Chargez votre Mantra de réconfort
+
+ Chargez votre Mantra de libération
+
+Utilisez :
+
+ Symbole de rapidité
+
+pour maintenir la Rapidité sur le groupe.
+
+ Évitez de le poser directement sur le stack Pouvoir.
+
+━━━━━━━━━━━━━━━━━━
+
+ Stack Pouvoir
+Si le commandant demande un stack avant engagement :
+
+ F1 Chapitre 4 : Conséquences brûlantes
+(pour créer un champ de feu)
+
+ F1 Chapitre 2 : Explosion incendiaire
+(pour ajouter un blast)
+
+ Frappe sacrée
+
+ Pleins pouvoirs
+
+Cela permet de générer :
+
+• Pouvoir
+• Soins
+• Endurance
+
+pour tout le sous-groupe.
+
+━━━━━━━━━━━━━━━━━━
+
+ Appel Pull
+Lorsque le commandant annonce un pull :
+
+ Posez Symbole de rapidité sur les ennemis
+
+afin de retirer leur Aegis avant le spike.
+
+Ensuite :
+
+ F1 Chapitre 3 : Réprimande brûlante
+
+pour ajouter du contrôle.
+
+Si vous jouez Hache :
+
+ Hache 3
+
+pour renforcer le pull et perturber les ennemis.
+
+ Objectif :
+
+Retirer l'Aegis ennemie avant le burst du groupe.
+ Engage / Push
+Au moment de l'engage :
+
+Votre priorité absolue est la Stabilité.
+
+Rotation simple :
+
+ Tenez bon !
+
+ Jugement du bouclier
+
+(Placez-vous devant votre groupe pour maximiser l'effet.)
+
+Une fois Tenez bon ! terminé :
+
+ F3 Courage indomptable
+
+ F3 Chapitre 4 : Position inébranlable
+
+Cela permet de prolonger la couverture défensive pendant tout le push.
+
+━━━━━━━━━━━━━━━━━━
+
+ Appel Puits / Well
+Lorsque le commandant annonce un Well :
+
+ Ligne de protection
+
+pour bloquer ou canaliser les déplacements ennemis.
+
+ F1 Chapitre 3 : Réprimande brûlante
+
+pour ajouter du contrôle supplémentaire.
+
+ Objectif :
+
+Empêcher les ennemis de sortir du spike.
+
+━━━━━━━━━━━━━━━━━━
+
+ Mêlée
+Pendant les combats prolongés :
+
+Maintenez en permanence :
+
+• Stabilité
+• Aegis
+• Protection
+• Célérité
+
+sur votre groupe.
+
+Utilisez :
+
+ Répit réparateur
+
+ Jugement du bouclier
+
+pour fournir des blocs supplémentaires.
+
+Si le groupe est contrôlé :
+
+ Présage de liberté
+
+ou
+
+ Mantra de libération
+
+pour briser les contrôles.
+
+━━━━━━━━━━━━━━━━━━
+
+Continuez à utiliser dès que possible :
+
+ Frappe sacrée
+
+ Symbole de rapidité
+
+ Pleins pouvoirs
+
+afin de maintenir les soins et les avantages.
+ Rotation de Stabilité
+Voici votre rotation de base :
+
+ Tenez bon !
+
+ F3 Courage indomptable
+
+ F3 Épilogue : Lignes ininterrompues
+
+ Sol consacré
+
+Puis retour au début de la rotation.
+
+ Utilisez Mantra de libération pour combler les éventuels trous de Stabilité.
+
+━━━━━━━━━━━━━━━━━━
+
+ Gestion des Tomes
+Le Tome de Courage est votre priorité.
+
+Conservez toujours suffisamment de Pages pour :
+
+ Courage indomptable
+
+ Position inébranlable
+
+ Lignes ininterrompues
+
+ Ne gaspillez pas vos Pages inutilement.
+
+━━━━━━━━━━━━━━━━━━
+
+Le Tome de Résolution doit être utilisé principalement :
+
+• pour les cleanses importants
+• lors des grosses pressions d'altérations
+• en soutien du deuxième support
+
+━━━━━━━━━━━━━━━━━━
+
+ Astuces avancées
+ Bouclier 5
+
+Permet d'éjecter les ennemis qui tentent de relever un allié au sol.
+
+━━━━━━━━━━━━━━━━━━
+
+ Sanctuaire
+
+À poser :
+
+• sur les corps ennemis
+• sur les zones de regroupement
+• sur les choke points
+
+Cela force souvent l'adversaire à utiliser sa Stabilité avant son engage.
+
+━━━━━━━━━━━━━━━━━━
+
+ Priorité absolue
+ Maintenir la Stabilité
+
+ Maintenir l'Aegis
+
+ Donner la Résistance pendant les spikes
+
+ Fournir les soins et cleanses
+
+ Participer aux contrôles
+
+Un Firebrand performant ne cherche pas à remonter les points de vie de son groupe.
+
+Il empêche simplement son groupe de mourir.
+[PSY] Jalyde | Yordan.7420
+OP
+ — 15-06-26 11:03
+ Comment jouer Power Virtuoso
+Le Power Virtuoso est un DPS de spike.
+
+Votre objectif n'est pas de maintenir un DPS constant mais de déclencher un maximum de dégâts pendant les fenêtres de burst du commandant.
+
+ La règle la plus importante du build :
+
+ Toujours essayer de lancer votre F1 avec 5 Lames.
+
+ Toujours essayer d'esquiver avant votre F1 afin de rendre le Bladesong impossible à bloquer grâce à Psychic Riposte.
+
+━━━━━━━━━━━━━━━━━━
+
+ Préparation
+Avant chaque engage :
+
+• Restez avec le groupe.
+• Préparez vos Lames.
+• Gardez vos compétences importantes disponibles.
+• Anticipez l'appel du commandant.
+
+Votre objectif est d'arriver au spike avec :
+
+ 5 Lames.
+ Une esquive disponible.
+ F1 prêt.
+
+━━━━━━━━━━━━━━━━━━
+
+ Appel Pull
+Lorsqu'un pull est annoncé :
+
+ Esquive
+
+ F1 — Bladesong Harmony
+
+L'objectif est de retirer les avantages ennemis avant que les contrôles et les pulls du groupe ne touchent.
+
+ N'attendez pas que les ennemis soient déjà regroupés.
+
+Votre strip doit arriver juste avant le reste du spike.
+
+━━━━━━━━━━━━━━━━━━
+
+ Rotation Espadon
+L'Espadon est votre rotation par défaut.
+
+ Lame miroir (2)
+
+ Berserker fantasmatique (4)
+
+ Estoc mental (3)
+
+ Esquive
+
+ F1 — Bladesong Harmony
+
+Cette rotation sert à générer des Lames tout en préparant votre burst principal.
+ Rotation Lance
+La Lance est utilisée lors des appels agressifs.
+
+Elle permet de produire votre plus gros burst de mêlée.
+
+━━━━━━━━━━━━━━━━━━
+
+ Appel Puits / Well
+ Distorsion temporelle (Time Warp)
+
+ Esquive
+
+ F1 — Bladesong Harmony
+
+ Rotation Lance
+
+L'objectif est de synchroniser votre F1 avec le spike du groupe puis d'enchaîner immédiatement avec votre burst Lance.
+
+━━━━━━━━━━━━━━━━━━
+
+ Combo Lance
+ Mind the Gap (2)
+
+ Mental Collapse (5)
+
+ Mind the Gap (2)
+
+ Phantasmal Lancer (4)
+
+ Imaginary Inversion (3)
+
+ Esquive
+
+ F1 — Bladesong Harmony
+
+━━━━━━━━━━━━━━━━━━
+
+ Important
+Mind the Gap applique Clarity.
+
+Cette amélioration renforce votre prochaine compétence de Lance.
+
+Mental Collapse permet de réinitialiser Mind the Gap.
+
+Le but est donc d'obtenir deux Mind the Gap renforcés pendant la même séquence.
+
+━━━━━━━━━━━━━━━━━━
+
+ Phantasmal Lancer vous projette vers l'avant.
+
+Ne l'utilisez que si vous êtes certain de ne pas sortir du groupe.
+ Survie
+Même si vous êtes un DPS, vous disposez de nombreux outils défensifs.
+
+━━━━━━━━━━━━━━━━━━
+
+Défensifs principaux
+• F4 — Bladesong Distortion
+• F5 — Bladeturn Requiem
+• Imaginary Inversion
+• Power Break
+• Signet of Illusions
+• Blade Renewal
+
+━━━━━━━━━━━━━━━━━━
+
+ Gestion des cooldowns
+Signet of Illusions
+Permet de recharger vos Bladesongs.
+
+Utilisez-le après un burst important afin de récupérer rapidement vos compétences F.
+
+━━━━━━━━━━━━━━━━━━
+
+Blade Renewal
+Vous rend pratiquement invulnérable.
+
+Génère également plusieurs Lames.
+
+Excellent bouton de survie.
+
+━━━━━━━━━━━━━━━━━━
+
+Signet of the Ether
+Permet de réinitialiser une partie du temps de recharge de Berserker fantasmatique.
+
+Utilisez-le lorsque vous avez besoin d'un burst supplémentaire.
+
+━━━━━━━━━━━━━━━━━━
+
+ Erreurs fréquentes
+• Utiliser F1 avec moins de 5 Lames.
+• Oublier d'esquiver avant F1.
+• Utiliser Phantasmal Lancer trop agressivement.
+• Jouer trop longtemps à la Lance.
+• Utiliser F4 trop tard.
+• S'éloigner du commandant.
+
+━━━━━━━━━━━━━━━━━━
+
+ Priorité absolue
+ Survivre.
+
+ Suivre le commandant.
+
+ Maintenir 5 Lames.
+
+ Esquive → F1 sur les spikes.
+
+ Participer aux appels Puits et Brèche.
+
+ Finir les ennemis à terre.
+[PSY] Jalyde | Yordan.7420
+OP
+ — 15-06-26 11:40
+ Comment jouer Power Vindicator
+Le Power Vindicator alterne entre deux rôles :
+
+ Lance = pression à distance, poke, cleave et préparation du spike.
+
+ Espadon = burst de mêlée pour sécuriser les downs.
+
+ Votre objectif n'est PAS de rester au contact en permanence.
+
+Le gameplay idéal :
+
+ Lance → pression
+
+ Engage commandant
+
+ Esquive offensive
+
+ Burst Espadon
+
+ Sortie
+
+ Retour Lance
+
+━━━━━━━━━━━━━━━━━━
+
+ Appel Pull (Grab)
+Restez sur Lance.
+
+ Ravage abyssal (Lance 5)
+
+ Tache abyssale (Lance 4)
+
+ Ravage abyssal (Lance 5)
+
+ Force abyssale (Lance 2)
+
+ Ravage abyssal (Lance 5)
+
+ L'objectif est de maintenir une pression constante sur les ennemis regroupés et d'aider à préparer le spike du groupe.
+
+ Ne plongez pas en mêlée simplement parce qu'un pull a été lancé.
+
+Attendez que le commandant engage réellement.
+
+━━━━━━━━━━━━━━━━━━
+
+ Appel Engage / Push
+Lorsque le commandant commit :
+
+ Déferlement du charognard
+
+ Esquive offensive
+
+ Requiem de l'éternité (Espadon 4)
+
+ Assaut fantomatique (Espadon 2)
+
+ Brume déchaînée (Espadon 5)
+
+ Esquive offensive
+
+ Le but est de frapper très fort dans une fenêtre très courte puis ressortir immédiatement.
+
+ Ne restez pas statique dans le groupe ennemi après votre burst.
+ Appel Puits / Well
+C'est votre principale fenêtre de dégâts.
+
+Commencez si possible sur Lance :
+
+ Ravage abyssal (Lance 5)
+
+ Tache abyssale (Lance 4)
+
+ Ravage abyssal (Lance 5)
+
+Puis engagez :
+
+ Déferlement du charognard
+
+ Esquive offensive
+
+ Requiem de l'éternité (Espadon 4)
+
+ Assaut fantomatique (Espadon 2)
+
+ Brume déchaînée (Espadon 5)
+
+ Esquive offensive
+
+ Votre rôle est d'ajouter un maximum de dégâts dans les puits du groupe afin de générer rapidement des downs.
+
+━━━━━━━━━━━━━━━━━━
+
+ Appel Brèche (Breach)
+Même logique que l'appel Puits.
+
+Profitez du déplacement du groupe ennemi pour placer :
+
+ Ravage abyssal (Lance 5)
+
+ Déferlement du charognard
+
+ Requiem de l'éternité (Espadon 4)
+
+ Assaut fantomatique (Espadon 2)
+
+ Brume déchaînée (Espadon 5)
+
+ Les ennemis sont souvent désorganisés pendant une Brèche.
+
+C'est un excellent moment pour sécuriser plusieurs downs.
+
+━━━━━━━━━━━━━━━━━━
+
+ Vents de jade
+ Vents de jade
+
+À utiliser uniquement :
+
+• Gros engage
+• Spike important
+• Ennemis regroupés
+• Call explicite du commandant
+
+ Cette compétence coûte énormément d'énergie.
+
+Ne la lancez pas sur des cibles isolées.
+ Survie
+Le Power Vindicator est très résistant...
+
+...tant qu'il garde ses outils défensifs.
+
+Utilisez :
+
+ Esquive Vindicator
+
+ Garde impériale (Espadon 3)
+
+ Ombres de riposte
+
+ Blitz abyssal (Lance 3)
+
+pour survivre aux contre-spikes.
+
+ Si la mêlée devient dangereuse :
+
+ Sortez immédiatement.
+
+ Revenez sur Lance.
+
+Continuez à infliger des dégâts à distance.
+
+━━━━━━━━━━━━━━━━━━
+
+ Priorités
+ Rester vivant
+
+ Utiliser vos esquives offensives régulièrement
+
+ Utiliser Ravage abyssal (Lance 5) dès que possible
+
+ Utiliser Déferlement du charognard dès que disponible
+
+ Utiliser Requiem de l'éternité sur les spikes
+
+ Utiliser Vents de jade sur les gros appels
+
+━━━━━━━━━━━━━━━━━━
+
+ Erreurs à éviter
+ Garder son endurance pleine
+
+ Rester trop longtemps en mêlée
+
+ Utiliser Assaut fantomatique sans soutien
+
+ Utiliser Vents de jade hors spike
+
+ Changer de légende avec beaucoup d'énergie restante
+
+ Oublier la pression à distance de la Lance
+
+ Un bon Vindicator entre en mêlée tard, frappe très fort, puis ressort avant que la contre-attaque ennemie n'arrive.
+[PSY] Jalyde | Yordan.7420
+OP
+ — 15-06-26 12:47
+ Comment jouer Support Specter
+Le Support Specter est un support secondaire qui protège son sous-groupe grâce aux barrières, aux Auras obscures, à la Résistance, à la Stabilité et aux soins générés par le Relique de Karakosa.
+
+ Votre objectif n'est pas de spammer vos soins.
+
+Votre objectif est de :
+
+• Maintenir les barrières
+• Déclencher Karakosa régulièrement
+• Fournir Stabilité et Résistance
+• Soutenir votre cible liée via Siphon
+
+━━━━━━━━━━━━━━━━━━━
+
+ Avant l'engagement
+Préparation
+ Utilisez Siphon (F1) sur un allié.
+
+Idéalement :
+
+• Un DPS de votre sous-groupe
+• Le commandant si vous êtes dans son groupe
+
+Cette cible devient votre allié lié et bénéficiera de nombreux effets de soutien.
+
+━━━━━━━━━━━━━━━━━━━
+
+ Stack Pouvoir
+Avant le départ :
+
+ Utilisez Shadow Sap 1 à 2 fois.
+
+Cela permet de :
+
+• Générer des barrières
+• Préparer vos soins
+• Commencer à soutenir le groupe
+
+Ne videz pas toute votre Initiative avant le premier engage.
+ Appel Puits / Well
+Lorsque le commandant annonce un spike :
+
+ Shadowfall
+
+Utilisez-le pour participer au contrôle et renforcer la pression du groupe.
+
+━━━━━━━━━━━━━━━━━━━
+
+ Clash mêlée
+Le Specter ne possède pas une rotation rigide.
+
+Votre priorité est :
+
+ Poser des champs obscurs
+
+ Les faire exploser avec vos Blast Finishers
+
+ Déclencher Karakosa
+
+ Maintenir les barrières
+
+━━━━━━━━━━━━━━━━━━━
+
+Rotation type
+ Siphon
+
+ Well of Bounty
+
+ Shadow Sap ×2
+
+ Siphon
+
+ Shadow Sap ×2
+
+ Entrée en Linceul
+
+ Mind Shock
+
+ Grasping Shadows
+
+ Dawn's Repose
+
+ Eternal Night
+
+ Sortie du Linceul
+
+ Well of Gloom
+
+ Shadow Sap ×2
+
+ Siphon
+
+ Shadow Sap ×2
+
+Adaptez toujours cette séquence à la situation.
+ Priorités
+ Utiliser Siphon dès que possible.
+
+ Déclencher Karakosa grâce aux Blast Finishers.
+
+ Maintenir les barrières avec Shadow Sap.
+
+ Espacer Well of Bounty et Mind Shock pour couvrir la Stabilité.
+
+ Utiliser le Linceul dès qu'il est disponible.
+
+━━━━━━━━━━━━━━━━━━━
+
+ Conseils importants
+Utilisez un raccourci pour :
+
+• Définir une cible personnelle
+• Sélectionner une cible personnelle
+
+Cela permet de retrouver instantanément votre cible liée pour :
+
+ Siphon
+
+ Les auto-attaques du sceptre
+
+ Le soutien du sous-groupe
+
+━━━━━━━━━━━━━━━━━━━
+
+ Erreurs fréquentes
+ Lancer toutes les Wells en même temps.
+
+ Dépenser toute son Initiative immédiatement.
+
+ Oublier Siphon.
+
+ Utiliser Well of Bounty en même temps que votre support principal donne déjà la Stabilité.
+
+ Ne pas exploiter les champs obscurs avec Shadow Sap.
+
+ Un bon Specter maintient constamment les barrières, les boons et les soins de Karakosa tout au long du combat.
+[PSY] Jalyde | Yordan.7420
+OP
+ — 19-07-26 19:51
+ Comment jouer – Power Amalgame McM (1/2)
+ Votre objectif est de délivrer un burst extrêmement puissant pendant les appels du commandant. Le Power Amalgame alterne entre des phases de préparation et de courtes fenêtres où il concentre la majorité de ses dégâts.
+
+Avant l'engage
+• Commencez sur le marteau équipé du Sigil of Bloodlust.
+• Montez vos 25 charges dès que possible.
+• Conservez Thunderclap, Napalm, vos Morphs et Evolve pour le prochain push.
+• Suivez le commandant sans vous exposer : votre efficacité dépend du timing.
+
+Engage
+À l'appel « Push » :
+
+ Entrez avec la mêlée.
+ Attendez que les ennemis soient regroupés par les pulls et les Wells.
+ Déclenchez votre burst uniquement lorsque plusieurs cibles sont packées.
+
+Un burst lancé sur des ennemis dispersés perd une grande partie de sa valeur.
+
+Burst
+Votre séquence repose sur un principe simple :
+
+ Plasmatic State
+→ Active votre bonus de dégâts avant le reste du burst.
+
+ Thunderclap +  Napalm
+→ Ouvrent votre fenêtre de dégâts.
+
+ Flux State
+→ Regroupe les ennemis afin de maintenir un maximum de cibles dans votre burst.
+
+ Offensive Protocol: Obliterate
+→ Inflige un très gros coup tout en détruisant les Barrier adverses.
+
+ Offensive Protocol: Demolish
+→ Termine la séquence avec un nouveau pic de dégâts.
+
+ Evolve
+→ Réinitialise ensuite toutes vos compétences Morph afin de préparer immédiatement un second burst.
+
+ N'utilisez jamais Evolve avant vos Morphs, sinon vous perdez complètement son principal intérêt.
+ Comment jouer – Power Amalgame McM (2/2)
+Entre deux spikes
+Une fois votre burst terminé :
+
+• Alternez entre Marteau, Elixir Gun et Lance-flammes.
+• Utilisez Electro-whirl dès son retour.
+• Utilisez Acid Bomb dès que disponible.
+• Maintenez Flame Jet lorsque vos gros cooldowns sont en recharge.
+• Essayez de conserver Thunderclap et Napalm synchronisés pour le prochain engage.
+
+Le Lance-flammes sert principalement à maintenir la pression pendant que vous préparez votre prochain burst.
+
+Survie
+ A.E.D.
+Votre principal outil défensif. Activez-le avant un gros burst ennemi ou si vous pensez être focus.
+
+ Shock Shield
+Excellent blocage pour survivre quelques secondes supplémentaires au cœur de la mêlée.
+
+ Defensive Protocol: Thorns
+Votre seul brise-étourdissement. Évitez de le dépenser uniquement pour les dégâts si vous risquez d'être contrôlé.
+
+ Rocket Charge
+Utilisez-le pour rejoindre rapidement la mêlée ou vous repositionner grâce à ses esquives.
+
+Astuces
+ Lancez toujours Plasmatic State avant votre burst.
+ Synchronisez Thunderclap et Napalm autant que possible.
+ Utilisez Evolve uniquement après vos compétences Morph.
+ Annulez le recul d'Acid Bomb avec un Weapon Swap après le premier impact.
+ Restez dans la mêlée uniquement le temps nécessaire pour vider votre burst, puis repositionnez-vous avec le commandant.
+
+ Un bon Power Amalgame ne cherche pas à infliger des dégâts en continu. Il fait la différence en concentrant un maximum de dégâts exactement au moment où la squad engage.
