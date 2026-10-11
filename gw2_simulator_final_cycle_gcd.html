@@ -1,0 +1,1780 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>GW2 Combat Simulator</title>
+<script src="https://cdn.tailwindcss.com">
+// ---------------- ROTATION OPTIMIZER --------------------
+
+function getSelectedSkills() {
+  const boxes = document.querySelectorAll('.skill-box-select');
+  const skills = [];
+  boxes.forEach(b=>{
+    if(b.checked){
+      skills.push({
+        name: b.dataset.name,
+        coeff: Number(b.dataset.coeff),
+        cd: Number(b.dataset.cd),
+        cast: Number(b.dataset.cast)
+      });
+    }
+  });
+  return skills;
+}
+
+function computeSkillDPS(skill, power, ws, armor) {
+  return (ws * power * skill.coeff) / armor;
+}
+
+function greedyRotation(skills, duration, stats){
+  let timeline = [];
+  let t = 0;
+  let cds = skills.map(()=>0);
+  while(t < duration){
+    let best = -1, bestDmg = 0;
+    for(let i=0;i<skills.length;i++){
+      if(cds[i] <= t){
+        const dmg = computeSkillDPS(skills[i], stats.power, stats.ws, stats.armor);
+        if(dmg > bestDmg){
+          bestDmg = dmg;
+          best = i;
+        }
+      }
+    }
+    if(best === -1){ t += 0.1; continue; }
+    const s = skills[best];
+    timeline.push({t, name:s.name});
+    cds[best] = t + s.cd;
+    t += s.cast;
+  }
+  return timeline;
+}
+
+function rotationDPS(timeline, skills, stats){
+  let dmg = 0;
+  timeline.forEach(ev=>{
+    const s = skills.find(x=>x.name === ev.name);
+    dmg += computeSkillDPS(s, stats.power, stats.ws, stats.armor);
+  });
+  return dmg / stats.duration;
+}
+
+async function optimizeRotation(){
+  const algo = document.getElementById('optimizationAlgo').value;
+  const duration = Number(document.getElementById('rotationDuration').value);
+  const skills = getSelectedSkills();
+  if(skills.length === 0){ alert("Aucune compétence sélectionnée."); return; }
+
+  const stats = {
+    power: Number(document.getElementById('power').value),
+    armor: Number(document.getElementById('targetArmor').value),
+    ws: getSelectedWeaponStrength(),
+    duration
+  };
+
+  let timeline = greedyRotation(skills, duration, stats);
+  const dps = rotationDPS(timeline, skills, stats);
+
+  document.getElementById('optimalDPS').textContent = Math.round(dps);
+  document.getElementById('rotationSkillCount').textContent = timeline.length;
+  document.getElementById('dpsImprovement').textContent = "+0%";
+
+  const seq = document.getElementById('rotationSequence');
+  seq.innerHTML = "";
+  timeline.forEach(ev=>{
+    const box = document.createElement('div');
+    box.style.padding = "6px 10px";
+    box.style.border = "1px solid #444";
+    box.style.borderRadius = "6px";
+    box.textContent = ev.name + " @ " + ev.t.toFixed(1) + "s";
+    seq.appendChild(box);
+  });
+
+  document.getElementById('rotationResults').style.display = "block";
+}
+
+document.getElementById('btnOptimizeRotation').addEventListener('click', optimizeRotation);
+
+// Dummy skills loader
+function loadDummySkills(){
+  const cont = document.getElementById('skillsSelector');
+  cont.innerHTML = "";
+  const base = [
+    {name:'Skill A', coeff:1.2, cd:5, cast:0.5},
+    {name:'Skill B', coeff:0.8, cd:3, cast:0.25},
+    {name:'Skill C', coeff:2.0, cd:8, cast:0.75},
+  ];
+  base.forEach(s=>{
+    const div = document.createElement('div');
+    div.style.padding = "8px";
+    div.style.background = "#0b1220";
+    div.style.border = "1px solid #1f2937";
+    div.style.borderRadius = "8px";
+
+    div.innerHTML = `
+      <label>
+        <input type="checkbox" class="skill-box-select" 
+        data-name="${s.name}" data-coeff="${s.coeff}" 
+        data-cd="${s.cd}" data-cast="${s.cast}"> 
+        <b>${s.name}</b><br>
+        Coeff: ${s.coeff} — CD: ${s.cd}s — Cast: ${s.cast}s
+      </label>`;
+    cont.appendChild(div);
+  });
+}
+
+loadDummySkills();
+
+const FRAME = 1/60;
+const weaponApiMap = {
+  "Épée":"Sword","Hache":"Axe","Masse":"Mace","Dague":"Dagger",
+  "Pistolet":"Pistol","Focus":"Focus","Torche":"Torch","Bouclier":"Shield",
+  "sceptre":"Scepter","cor de guerre":"Warhorn",
+  "Espadon":"Greatsword","Marteau":"Hammer","Arc long":"Longbow",
+  "Arc court":"Shortbow","Fusil":"Rifle","Bâton":"Staff","Lance":"Spear"
+};
+const GLOBAL_CD = 0.75;
+
+function findAutoAttack(skills){
+  const weaponSkills = skills.filter(s => s.slot === "Weapon");
+  if(weaponSkills.length === 0) return null;
+
+  let aa = weaponSkills[0];
+  weaponSkills.forEach(s=>{
+    if(s.cd <= aa.cd && s.cast <= aa.cast) aa = s;
+  });
+  return aa;
+}
+
+function simulateFrameByFrame(skills, duration, stats){
+  let timeline = [];
+  let frames = Math.floor(duration / FRAME);
+  let t = 0;
+
+  let cds = new Map();
+  skills.forEach(s => cds.set(s.id, 0));
+
+  let gcdReady = 0;
+  let casting = null;
+  let castRemaining = 0;
+
+  const autoAtk = findAutoAttack(skills);
+
+  for(let f = 0; f < frames; f++){
+    t = f * FRAME;
+    if(casting){
+      castRemaining -= FRAME;
+      if(castRemaining <= 0){
+        const dmg = computeSkillDPS(casting, stats.power, stats.ws, stats.armor);
+        timeline.push({t, name: casting.name, dmg});
+
+        cds.set(casting.id, t + casting.cd);
+        gcdReady = t + GLOBAL_CD;
+
+        casting = null;
+      }
+      continue;
+    }
+
+    let best = null;
+    let bestDmg = 0;
+
+    for(const s of skills){
+      const cdReady = cds.get(s.id) || 0;
+
+      if(cdReady > t) continue;
+      if(gcdReady > t) continue;
+
+      const dmg = computeSkillDPS(s, stats.power, stats.ws, stats.armor);
+      if(dmg > bestDmg){
+        bestDmg = dmg;
+        best = s;
+      }
+    }
+
+    if(best === autoAtk){
+      const anyBetter = skills.some(s => 
+        s !== autoAtk &&
+        (cds.get(s.id) || 0) <= t &&
+        gcdReady <= t &&
+        computeSkillDPS(s, stats.power, stats.ws, stats.armor) > computeSkillDPS(autoAtk, stats.power, stats.ws, stats.armor)
+      );
+      if(anyBetter) best = null;
+    }
+
+    if(best){
+      casting = best;
+      castRemaining = best.cast;
+      if(best.cast === 0) castRemaining = FRAME;
+    } else if(autoAtk){
+      const cdReady = cds.get(autoAtk.id) || 0;
+      if(cdReady <= t && gcdReady <= t){
+        casting = autoAtk;
+        castRemaining = autoAtk.cast || FRAME;
+      }
+    }
+  }
+
+  const total = timeline.reduce((a,b)=>a+b.dmg,0);
+  return {timeline, dps: total/duration};
+}
+
+
+function getSelectedWeaponApiTypes(){
+  const vals = new Set();
+  [arme1, arme2, arme3, arme4].forEach(s=>{
+    const v = s.value;
+    if(v && weaponApiMap[v]) vals.add(weaponApiMap[v]);
+  });
+  return vals;
+}
+
+function getSelectedTraitIds(){
+  const ids = [];
+  [1,2,'elite'].forEach(k=>{
+    const st = selectedTraits[k];
+    if(!st) return;
+    ['adept','master','grandmaster'].forEach(tier=>{
+      if(st[tier]) ids.push(st[tier]);
+    });
+  });
+  return ids;
+}
+
+async function loadRealSkillsForProfession(prof){
+  if(window._gw2_all_skills && window._gw2_all_skills.prof === prof) return window._gw2_all_skills.list;
+  const all = await fetch("https://api.guildwars2.com/v2/skills?ids=all").then(r=>r.json());
+  const usable = all.filter(s => s.professions && s.professions.includes(prof));
+  window._gw2_all_skills = {prof, list: usable};
+  return usable;
+}
+
+async function loadSkillsSelectorReal(){
+  const fr = document.getElementById("classe").value;
+  const prof = classMap[fr];
+  const skillList = await loadRealSkillsForProfession(prof);
+  const cont = document.getElementById('skillsSelector');
+  cont.innerHTML = "";
+
+  const selectedSpecIds = [];
+  [1,2,'elite'].forEach(k=>{
+    const sp = selectedSpecs[k];
+    if(sp && sp.id) selectedSpecIds.push(sp.id);
+  });
+
+  const weaponTypes = getSelectedWeaponApiTypes();
+  const selectedTraitIds = getSelectedTraitIds();
+
+  const traitUnlocked = new Set();
+  for(const tid of selectedTraitIds){
+    const t = traitCache[tid];
+    if(!t) continue;
+    if(t.skills && Array.isArray(t.skills)){
+      t.skills.forEach(sid => traitUnlocked.add(sid));
+    }
+
+    if(t.facts && Array.isArray(t.facts)){
+      t.facts.forEach(f=>{
+        if(f.type === 'Skill' && f.skill_id) traitUnlocked.add(f.skill_id);
+      });
+    }
+  }
+
+  const candidates = skillList.filter(s=>{
+    // Filter by specialization: keep if core (no specialization) OR specialization is selected OR if no spec selected at all (allow)
+    if(selectedSpecIds.length > 0){
+      if(s.specialization && !selectedSpecIds.includes(s.specialization)) {
+        // if specialization exists and not selected -> exclude
+        return false;
+      }
+      // else allow (core or matching spec)
+    }
+
+    // Filter by weapon: if skill has weapon_type, ensure it matches one of selected weapon types
+    if(s.weapon_type){
+      // skill.weapon_type can be a string
+      if(weaponTypes.size > 0 && !weaponTypes.has(s.weapon_type)) return false;
+    }
+
+    // If skill has 'categories' or 'slot' it's usually utility/heal/elite; allow those
+    return true;
+  });
+
+  // Apply trait filter: if any trait unlocks skills, include union of candidates and unlocked; else use candidates
+  let finalSkills = candidates;
+  if(traitUnlocked.size > 0){
+    // include candidate skills + unlocked trait skills (from API)
+    const unlockedArr = skillList.filter(s => traitUnlocked.has(s.id));
+    const map = new Map();
+    finalSkills.forEach(s=>map.set(s.id,s));
+    unlockedArr.forEach(s=>map.set(s.id,s));
+    finalSkills = Array.from(map.values());
+  }
+
+  // Sort by slot type: weapon skills first (slot 1-5), then utilities then elite
+  finalSkills.sort((a,b)=>{
+    const slotOrder = {'Weapon':0,'Heal':1,'Utility':2,'Elite':3,'Profession':4,'Bundle':5,'Pet':6};
+    const sa = a.slot || 'Weapon';
+    const sb = b.slot || 'Weapon';
+    const oa = slotOrder[sa] !== undefined ? slotOrder[sa] : 10;
+    const ob = slotOrder[sb] !== undefined ? slotOrder[sb] : 10;
+    if(oa !== ob) return oa - ob;
+    // fallback name
+    return (a.name||'').localeCompare(b.name||'');
+  });
+
+  // Render
+  finalSkills.forEach(s=>{
+    const div = document.createElement('div');
+    div.style.padding = "6px";
+    div.style.background = "#071826";
+    div.style.border = "1px solid #122032";
+    div.style.borderRadius = "8px";
+    div.style.display = "flex";
+    div.style.alignItems = "center";
+    div.style.gap = "8px";
+
+    const checked = traitUnlocked.size>0 ? traitUnlocked.has(s.id) || true : true; // if trait unlocked exists, show both unlocked and base skills - keep checked default true
+    div.innerHTML = `
+      <label style="display:flex;gap:8px;align-items:center;width:100%;">
+        <input type="checkbox" class="skill-box-select" 
+          data-id="${s.id}" data-name="${s.name}" 
+          data-coeff="${(s.coefficient && s.coefficient[0] && s.coefficient[0].value) ? s.coefficient[0].value : 1.0}" 
+          data-cd="${s.cooldown || 0}" 
+          data-cast="${(s.cast_time||0)/1000 || 0}">
+        <img src="${s.icon || ''}" style="width:28px;height:28px;flex-shrink:0;">
+        <div style="flex:1;">
+          <div style="font-weight:700;">${s.name}</div>
+          <div style="font-size:12px;color:#94a3b8;">Slot: ${s.slot || 'Weapon'} ${s.weapon_type ? '— Weapon: '+s.weapon_type : ''}</div>
+        </div>
+      </label>
+    `;
+    cont.appendChild(div);
+  });
+}
+
+// Frame-by-frame rotation simulation
+function simulateFrameByFrame(skills, duration, stats){
+  let timeline = [];
+  let t = 0;
+  let frames = Math.floor(duration / FRAME);
+  let cds = skills.map(()=>0);
+  let casting = null;
+  let castRemaining = 0;
+
+  for(let f=0; f<frames; f++){
+    t = f * FRAME;
+
+    if(casting){
+      castRemaining -= FRAME;
+      if(castRemaining <= 0){
+        const dmg = computeSkillDPS(casting, stats.power, stats.ws, stats.armor);
+        timeline.push({t, name:casting.name, dmg});
+        casting = null;
+      }
+      continue;
+    }
+
+    let best = -1, bestDmg = 0;
+    for(let i=0;i<skills.length;i++){
+      if(cds[i] <= t){
+        const dmg = computeSkillDPS(skills[i], stats.power, stats.ws, stats.armor);
+        if(dmg > bestDmg){
+          bestDmg = dmg;
+          best = i;
+        }
+      }
+    }
+
+    if(best >= 0){
+      casting = skills[best];
+      castRemaining = casting.cast;
+      cds[best] = t + casting.cd;
+    }
+  }
+
+  const total = timeline.reduce((a,b)=>a+b.dmg,0);
+  return {timeline, dps: total/duration};
+}
+
+async function optimizeRotationFrameMode(){
+  const duration = Number(document.getElementById('rotationDuration').value);
+  // collect only checked skills
+  const skillBoxes = Array.from(document.querySelectorAll('.skill-box-select')).filter(b=>b.checked);
+  const skills = skillBoxes.map(b=>({
+    id: Number(b.dataset.id),
+    name: b.dataset.name,
+    coeff: Number(b.dataset.coeff),
+    cd: Number(b.dataset.cd),
+    cast: Number(b.dataset.cast)
+  }));
+  if(skills.length === 0){ alert("Aucune compétence sélectionnée."); return; }
+
+  const stats = {
+    power: Number(document.getElementById('power').value),
+    armor: Number(document.getElementById('targetArmor').value),
+    ws: getSelectedWeaponStrength(),
+    duration
+  };
+
+  const result = simulateFrameByFrame(skills, duration, stats);
+
+  document.getElementById('optimalDPS').textContent = Math.round(result.dps);
+  document.getElementById('rotationSkillCount').textContent = result.timeline.length;
+  document.getElementById('dpsImprovement').textContent = "+0%";
+
+  const seq = document.getElementById('rotationSequence');
+  seq.innerHTML = "";
+  result.timeline.forEach(ev=>{
+    const box = document.createElement('div');
+    box.style.padding = "6px 10px";
+    box.style.border = "1px solid #444";
+    box.style.borderRadius = "6px";
+    box.textContent = ev.name + " @ " + ev.t.toFixed(2) + "s";
+    seq.appendChild(box);
+  });
+
+  document.getElementById('rotationResults').style.display = "block";
+}
+
+// hook optimize button
+document.getElementById('btnOptimizeRotation').onclick = optimizeRotationFrameMode;
+
+// update skills when class/specs/traits/weapons change
+document.getElementById('classe').addEventListener('change', loadSkillsSelectorReal);
+[arme1, arme2, arme3, arme4].forEach(s=>s.addEventListener('change', loadSkillsSelectorReal));
+
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js">
+
+function getSelectedSkills() {
+  const boxes = document.querySelectorAll('.skill-box-select');
+  const skills = [];
+  boxes.forEach(b=>{
+    if(b.checked){
+      skills.push({
+        name: b.dataset.name,
+        coeff: Number(b.dataset.coeff),
+        cd: Number(b.dataset.cd),
+        cast: Number(b.dataset.cast)
+      });
+    }
+  });
+  return skills;
+}
+
+function computeSkillDPS(skill, power, ws, armor) {
+  return (ws * power * skill.coeff) / armor;
+}
+
+function greedyRotation(skills, duration, stats){
+  let timeline = [];
+  let t = 0;
+  let cds = skills.map(()=>0);
+  while(t < duration){
+    let best = -1, bestDmg = 0;
+    for(let i=0;i<skills.length;i++){
+      if(cds[i] <= t){
+        const dmg = computeSkillDPS(skills[i], stats.power, stats.ws, stats.armor);
+        if(dmg > bestDmg){
+          bestDmg = dmg;
+          best = i;
+        }
+      }
+    }
+    if(best === -1){ t += 0.1; continue; }
+    const s = skills[best];
+    timeline.push({t, name:s.name});
+    cds[best] = t + s.cd;
+    t += s.cast;
+  }
+  return timeline;
+}
+
+function rotationDPS(timeline, skills, stats){
+  let dmg = 0;
+  timeline.forEach(ev=>{
+    const s = skills.find(x=>x.name === ev.name);
+    dmg += computeSkillDPS(s, stats.power, stats.ws, stats.armor);
+  });
+  return dmg / stats.duration;
+}
+
+async function optimizeRotation(){
+  const algo = document.getElementById('optimizationAlgo').value;
+  const duration = Number(document.getElementById('rotationDuration').value);
+  const skills = getSelectedSkills();
+  if(skills.length === 0){ alert("Aucune compétence sélectionnée."); return; }
+
+  const stats = {
+    power: Number(document.getElementById('power').value),
+    armor: Number(document.getElementById('targetArmor').value),
+    ws: getSelectedWeaponStrength(),
+    duration
+  };
+
+  let timeline = greedyRotation(skills, duration, stats);
+  const dps = rotationDPS(timeline, skills, stats);
+
+  document.getElementById('optimalDPS').textContent = Math.round(dps);
+  document.getElementById('rotationSkillCount').textContent = timeline.length;
+  document.getElementById('dpsImprovement').textContent = "+0%";
+
+  const seq = document.getElementById('rotationSequence');
+  seq.innerHTML = "";
+  timeline.forEach(ev=>{
+    const box = document.createElement('div');
+    box.style.padding = "6px 10px";
+    box.style.border = "1px solid #444";
+    box.style.borderRadius = "6px";
+    box.textContent = ev.name + " @ " + ev.t.toFixed(1) + "s";
+    seq.appendChild(box);
+  });
+
+  document.getElementById('rotationResults').style.display = "block";
+}
+
+document.getElementById('btnOptimizeRotation').addEventListener('click', optimizeRotation);
+
+// Dummy skills loader
+function loadDummySkills(){
+  const cont = document.getElementById('skillsSelector');
+  cont.innerHTML = "";
+  const base = [
+    {name:'Skill A', coeff:1.2, cd:5, cast:0.5},
+    {name:'Skill B', coeff:0.8, cd:3, cast:0.25},
+    {name:'Skill C', coeff:2.0, cd:8, cast:0.75},
+  ];
+  base.forEach(s=>{
+    const div = document.createElement('div');
+    div.style.padding = "8px";
+    div.style.background = "#0b1220";
+    div.style.border = "1px solid #1f2937";
+    div.style.borderRadius = "8px";
+
+    div.innerHTML = `
+      <label>
+        <input type="checkbox" class="skill-box-select" 
+        data-name="${s.name}" data-coeff="${s.coeff}" 
+        data-cd="${s.cd}" data-cast="${s.cast}"> 
+        <b>${s.name}</b><br>
+        Coeff: ${s.coeff} — CD: ${s.cd}s — Cast: ${s.cast}s
+      </label>`;
+    cont.appendChild(div);
+  });
+}
+
+loadDummySkills();
+async function loadRealSkillsForProfession(prof){
+  // load once and cache
+  if(window._gw2_all_skills && window._gw2_all_skills.prof === prof) return window._gw2_all_skills.list;
+  const all = await fetch("https://api.guildwars2.com/v2/skills?ids=all").then(r=>r.json());
+  const usable = all.filter(s => s.professions && s.professions.includes(prof));
+  window._gw2_all_skills = {prof, list: usable};
+  return usable;
+}
+
+async function loadSkillsSelectorReal(){
+  const fr = document.getElementById("classe").value;
+  const prof = classMap[fr];
+  const skillList = await loadRealSkillsForProfession(prof);
+  const cont = document.getElementById('skillsSelector');
+  cont.innerHTML = "";
+
+  // Determine filters
+  const selectedSpecIds = [];
+  [1,2,'elite'].forEach(k=>{
+    const sp = selectedSpecs[k];
+    if(sp && sp.id) selectedSpecIds.push(sp.id);
+  });
+
+  const weaponTypes = getSelectedWeaponApiTypes();
+  const selectedTraitIds = getSelectedTraitIds();
+
+  // Build set of skills unlocked by selected traits
+  const traitUnlocked = new Set();
+  for(const tid of selectedTraitIds){
+    const t = traitCache[tid];
+    if(!t) continue;
+    if(t.skills && Array.isArray(t.skills)){
+      t.skills.forEach(sid => traitUnlocked.add(sid));
+    }
+    // some traits have 'facts' that reference skills by 'skill_id'
+    if(t.facts && Array.isArray(t.facts)){
+      t.facts.forEach(f=>{
+        if(f.type === 'Skill' && f.skill_id) traitUnlocked.add(f.skill_id);
+      });
+    }
+  }
+
+  // Build candidate skills filtered by specialization and weapon
+  const candidates = skillList.filter(s=>{
+    // Filter by specialization: keep if core (no specialization) OR specialization is selected OR if no spec selected at all (allow)
+    if(selectedSpecIds.length > 0){
+      if(s.specialization && !selectedSpecIds.includes(s.specialization)) {
+        // if specialization exists and not selected -> exclude
+        return false;
+      }
+      // else allow (core or matching spec)
+    }
+
+    // Filter by weapon: if skill has weapon_type, ensure it matches one of selected weapon types
+    if(s.weapon_type){
+      // skill.weapon_type can be a string
+      if(weaponTypes.size > 0 && !weaponTypes.has(s.weapon_type)) return false;
+    }
+
+    // If skill has 'categories' or 'slot' it's usually utility/heal/elite; allow those
+    return true;
+  });
+
+  // Apply trait filter: if any trait unlocks skills, include union of candidates and unlocked; else use candidates
+  let finalSkills = candidates;
+  if(traitUnlocked.size > 0){
+    // include candidate skills + unlocked trait skills (from API)
+    const unlockedArr = skillList.filter(s => traitUnlocked.has(s.id));
+    const map = new Map();
+    finalSkills.forEach(s=>map.set(s.id,s));
+    unlockedArr.forEach(s=>map.set(s.id,s));
+    finalSkills = Array.from(map.values());
+  }
+
+  // Sort by slot type: weapon skills first (slot 1-5), then utilities then elite
+  finalSkills.sort((a,b)=>{
+    const slotOrder = {'Weapon':0,'Heal':1,'Utility':2,'Elite':3,'Profession':4,'Bundle':5,'Pet':6};
+    const sa = a.slot || 'Weapon';
+    const sb = b.slot || 'Weapon';
+    const oa = slotOrder[sa] !== undefined ? slotOrder[sa] : 10;
+    const ob = slotOrder[sb] !== undefined ? slotOrder[sb] : 10;
+    if(oa !== ob) return oa - ob;
+    // fallback name
+    return (a.name||'').localeCompare(b.name||'');
+  });
+
+  // Render
+  finalSkills.forEach(s=>{
+    const div = document.createElement('div');
+    div.style.padding = "6px";
+    div.style.background = "#071826";
+    div.style.border = "1px solid #122032";
+    div.style.borderRadius = "8px";
+    div.style.display = "flex";
+    div.style.alignItems = "center";
+    div.style.gap = "8px";
+
+    const checked = traitUnlocked.size>0 ? traitUnlocked.has(s.id) || true : true; // if trait unlocked exists, show both unlocked and base skills - keep checked default true
+    div.innerHTML = `
+      <label style="display:flex;gap:8px;align-items:center;width:100%;">
+        <input type="checkbox" class="skill-box-select" 
+          data-id="${s.id}" data-name="${s.name}" 
+          data-coeff="${(s.coefficient && s.coefficient[0] && s.coefficient[0].value) ? s.coefficient[0].value : 1.0}" 
+          data-cd="${s.cooldown || 0}" 
+          data-cast="${(s.cast_time||0)/1000 || 0}">
+        <img src="${s.icon || ''}" style="width:28px;height:28px;flex-shrink:0;">
+        <div style="flex:1;">
+          <div style="font-weight:700;">${s.name}</div>
+          <div style="font-size:12px;color:#94a3b8;">Slot: ${s.slot || 'Weapon'} ${s.weapon_type ? '— Weapon: '+s.weapon_type : ''}</div>
+        </div>
+      </label>
+    `;
+    cont.appendChild(div);
+  });
+}
+
+// Frame-by-frame rotation simulation
+function simulateFrameByFrame(skills, duration, stats){
+  let timeline = [];
+  let t = 0;
+  let frames = Math.floor(duration / FRAME);
+  let cds = skills.map(()=>0);
+  let casting = null;
+  let castRemaining = 0;
+
+  for(let f=0; f<frames; f++){
+    t = f * FRAME;
+
+    if(casting){
+      castRemaining -= FRAME;
+      if(castRemaining <= 0){
+        const dmg = computeSkillDPS(casting, stats.power, stats.ws, stats.armor);
+        timeline.push({t, name:casting.name, dmg});
+        casting = null;
+      }
+      continue;
+    }
+
+    let best = -1, bestDmg = 0;
+    for(let i=0;i<skills.length;i++){
+      if(cds[i] <= t){
+        const dmg = computeSkillDPS(skills[i], stats.power, stats.ws, stats.armor);
+        if(dmg > bestDmg){
+          bestDmg = dmg;
+          best = i;
+        }
+      }
+    }
+
+    if(best >= 0){
+      casting = skills[best];
+      castRemaining = casting.cast;
+      cds[best] = t + casting.cd;
+    }
+  }
+
+  const total = timeline.reduce((a,b)=>a+b.dmg,0);
+  return {timeline, dps: total/duration};
+}
+
+async function optimizeRotationFrameMode(){
+  const duration = Number(document.getElementById('rotationDuration').value);
+  // collect only checked skills
+  const skillBoxes = Array.from(document.querySelectorAll('.skill-box-select')).filter(b=>b.checked);
+  const skills = skillBoxes.map(b=>({
+    id: Number(b.dataset.id),
+    name: b.dataset.name,
+    coeff: Number(b.dataset.coeff),
+    cd: Number(b.dataset.cd),
+    cast: Number(b.dataset.cast)
+  }));
+  if(skills.length === 0){ alert("Aucune compétence sélectionnée."); return; }
+
+  const stats = {
+    power: Number(document.getElementById('power').value),
+    armor: Number(document.getElementById('targetArmor').value),
+    ws: getSelectedWeaponStrength(),
+    duration
+  };
+
+  const result = simulateFrameByFrame(skills, duration, stats);
+
+  document.getElementById('optimalDPS').textContent = Math.round(result.dps);
+  document.getElementById('rotationSkillCount').textContent = result.timeline.length;
+  document.getElementById('dpsImprovement').textContent = "+0%";
+
+  const seq = document.getElementById('rotationSequence');
+  seq.innerHTML = "";
+  result.timeline.forEach(ev=>{
+    const box = document.createElement('div');
+    box.style.padding = "6px 10px";
+    box.style.border = "1px solid #444";
+    box.style.borderRadius = "6px";
+    box.textContent = ev.name + " @ " + ev.t.toFixed(2) + "s";
+    seq.appendChild(box);
+  });
+
+  document.getElementById('rotationResults').style.display = "block";
+}
+
+// hook optimize button
+document.getElementById('btnOptimizeRotation').onclick = optimizeRotationFrameMode;
+
+// update skills when class/specs/traits/weapons change
+document.getElementById('classe').addEventListener('change', loadSkillsSelectorReal);
+[arme1, arme2, arme3, arme4].forEach(s=>s.addEventListener('change', loadSkillsSelectorReal));
+
+</script>
+<style>
+  :root{ --accent:#f59e0b; --muted:#94a3b8; }
+  body{background:linear-gradient(180deg,#061125,#0b1726); color:#e6eef8; font-family:Inter,system-ui,Segoe UI,Roboto,Arial; margin:0;}
+  .container{max-width:1200px;margin:20px auto;padding:18px;}
+  .card{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.03);border-radius:10px;}
+  h1{font-size:26px;color:var(--accent);text-align:center;margin-bottom:4px;}
+  .muted{color:var(--muted);}
+  .top-button{display:flex;justify-content:left;margin-bottom:12px;}
+  .row{display:flex;gap:18px;}
+  .col-left{flex:0 0 38%;}
+  .col-right{flex:1;}
+  .specs-grid{display:flex;flex-wrap:wrap;gap:8px;padding:8px;}
+  .hex{width:56px;height:49px;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;margin:6px;position:relative;}
+  .hex .inner{width:48px;height:42px;clip-path:polygon(25% 0%,75% 0,100% 50%,75% 100%,25% 100%,0 50%);background:#1f2937;display:flex;align-items:center;justify-content:center;border:2px solid rgba(255,255,255,0.04);}
+  .hex img{width:34px;height:34px;object-fit:contain;}
+  .hex.selected .inner{border-color:var(--accent);box-shadow:0 0 0 6px rgba(245,158,11,0.06);}
+  .place-buttons{display:flex;gap:4px;justify-content:center;margin-top:6px;}
+  .place-btn{background:#061125;border:1px solid rgba(255,255,255,0.03);padding:4px 6px;border-radius:6px;color:var(--muted);cursor:pointer;font-weight:600;}
+  .place-btn:hover{border-color:var(--accent); color:var(--accent);}
+  .spec-slot-block{border:1px solid rgba(255,255,255,0.03);padding:8px;border-radius:8px;margin-bottom:8px;background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));}
+  .traits-columns{display:flex;gap:10px;}
+  .trait-slot{width:auto;height:auto;border-radius:6px;background:#071826;border:1px solid rgba(255,255,255,0.03);display:flex;align-items:center;justify-content:flex-start;cursor:pointer;margin-bottom:6px;padding:8px;}
+  .trait-slot img{width:34px;height:34px;object-fit:contain;flex-shrink:0;}
+  .trait-slot.sel{outline:3px solid rgba(245,158,11,0.12);background:linear-gradient(180deg,#0f172a,#09202b);}
+  .stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
+  .result-cards{display:flex;gap:12px;flex-wrap:wrap;margin-top:10px;}
+  .result-card{flex:1;min-width:160px;padding:12px;border-radius:8px;text-align:center;}
+  .result-card h4{font-size:12px;color:#ffd8a8;margin-bottom:6px;}
+  .result-card p{font-weight:700;font-size:20px;}
+  @media(max-width:900px){ .row{flex-direction:column;} .col-left{flex:1;} .col-right{flex:1;} .stats-grid{grid-template-columns:1fr;} .place-buttons{flex-wrap:wrap;} }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+    <h1>GW2 Combat Simulator</h1>
+    <p class="muted" style="text-align:center;margin-bottom:8px;">Spécialisations & traits via API GW2</p>
+    <p class="muted" style="text-align:center;margin-bottom:8px;">force d'armé minimum prise en élévé</p>
+
+    <div class="top-button">
+      
+      <button id="btnSimulateTop" class="bg-gradient-to-r from-amber-600 to-orange-600 text-black font-bold px-6 py-3 rounded-lg">Lancer la simulation</button>
+    </div>
+
+<div style="display: flex; justify-content: left; margin-bottom: 12px;">
+  <div style="width: 380px;">
+
+    <!-- Sélecteur de Classe -->
+    <label class="muted">Classe</label>
+    <select id="classe" class="w-full bg-[#0b1220] text-white border border-[#1f2937] rounded px-3 py-2 mt-2 mb-4">
+      <option>Guerrier</option>
+      <option>Gardien</option>
+      <option>Revenant</option>
+      <option>Ingénieur</option>
+      <option>Rôdeur</option>
+      <option>Voleur</option>
+      <option>Élémentaliste</option>
+      <option>Envoûteur</option>
+      <option>Nécromant</option>
+    </select>
+
+    <!-- Ligne 1 -->
+    <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+      <div style="flex: 1;">
+        <label class="muted">Main gauche</label>
+        <select id="arme1" class="arme-select w-full bg-[#0b1220] text-white border border-[#1f2937] rounded px-3 py-2 mt-2"></select>
+      </div>
+      <div style="flex: 1;">
+        <label class="muted">Main droite</label>
+        <select id="arme2" class="arme-select w-full bg-[#0b1220] text-white border border-[#1f2937] rounded px-3 py-2 mt-2"></select>
+      </div>
+    </div>
+
+    <!-- Ligne 2 -->
+    <div style="display: flex; gap: 8px;">
+      <div style="flex: 1;">
+        <label class="muted">Main gauche</label>
+        <select id="arme3" class="arme-select w-full bg-[#0b1220] text-white border border-[#1f2937] rounded px-3 py-2 mt-2"></select>
+      </div>
+      <div style="flex: 1;">
+        <label class="muted">Main droite</label>
+        <select id="arme4" class="arme-select w-full bg-[#0b1220] text-white border border-[#1f2937] rounded px-3 py-2 mt-2"></select>
+      </div>
+    </div>
+    <p class="muted">Force d'arme calculée : <span id="weaponStrengthDisplay">0</span></p>
+  </div>
+          <div class="card" style="margin-top:10px;padding:12px;">
+          <div style="font-weight:700;margin-bottom:8px;">Statistiques</div>
+          <div class="stats-grid">
+            <div>
+              <label class="muted">Puissance</label>
+              <input id="power" type="number" value="1000" class="w-full mt-2 px-3 py-2 bg-[#071826] rounded border border-[#122032]" />
+            </div>
+            <div>
+              <label class="muted">Précision</label>
+              <input id="precision" type="number" value="1000" class="w-full mt-2 px-3 py-2 bg-[#071826] rounded border border-[#122032]" />
+            </div>
+            <div>
+              <label class="muted">Férocité</label>
+              <input id="ferocity" type="number" value="0" class="w-full mt-2 px-3 py-2 bg-[#071826] rounded border border-[#122032]" />
+            </div>
+            <div>
+              <label class="muted">Dégâts altération</label>
+              <input id="conditionDamage" type="number" value="0" class="w-full mt-2 px-3 py-2 bg-[#071826] rounded border border-[#122032]" />
+            </div>
+            <div>
+              <label class="muted">Expertise</label>
+              <input id="expertise" type="number" value="0" class="w-full mt-2 px-3 py-2 bg-[#071826] rounded border border-[#122032]" />
+            </div>
+          </div>
+
+          <div style="margin-top:12px;">
+            <label class="muted">Durée (s)</label>
+            <input id="duration" type="number" value="60" class="w-full mt-2 px-3 py-2 bg-[#071826] rounded border border-[#122032]" />
+            <label class="muted" style="margin-top:8px;display:block;">Armure cible</label>
+            <input id="targetArmor" type="number" value="2597" class="w-full mt-2 px-3 py-2 bg-[#071826] rounded border border-[#122032]" />
+          </div>
+        </div>
+              <div class="card" style="padding:12px;margin-top:12px;">
+          <div style="font-weight:700;margin-bottom:8px;">Résultats</div>
+          <div class="result-cards">
+            <div class="result-card" style="background:linear-gradient(180deg,#7f1d1d,#6b0f0f);">
+              <h4>DPS Moyen</h4><p id="avgDPS">0</p>
+            </div>
+            <div class="result-card" style="background:linear-gradient(180deg,#7c3aed,#6b21d9);">
+              <h4>DPS Burst</h4><p id="burstDPS">0</p>
+            </div>
+            <div class="result-card" style="background:linear-gradient(180deg,#6b21d9,#4c1d6f);">
+              <h4>Dégâts totaux</h4><p id="totalDamage">0</p>
+            </div>
+            <div class="result-card" style="background:linear-gradient(180deg,#0369a1,#075985);">
+              <h4>Durée</h4><p id="simDuration">0s</p>
+            </div>
+          </div>
+
+          <div style="margin-top:12px;">
+            <canvas id="dpsChart" style="width:100%;height:160px;"></canvas>
+          </div>
+
+          <div id="calculDetails" style="margin-top:16px;padding:12px;background:rgba(255,255,255,0.02);border-radius:8px;border:1px solid rgba(255,255,255,0.03);">
+            <div style="font-weight:700;margin-bottom:8px;color:#ffd8a8;">Détail des calculs</div>
+            <div id="calculContent" class="muted" style="font-size:13px;line-height:1.6;"></div>
+          </div>
+          <div class="card" style="padding:12px;margin-top:12px;">
+  <div style="font-weight:700;margin-bottom:8px;">🎯 Optimisation de Rotation</div>
+  
+  <div style="display:flex;gap:12px;margin-bottom:12px;">
+    <div style="flex:1;">
+      <label class="muted">Algorithme</label>
+      <select id="optimizationAlgo" class="w-full bg-[#0b1220] text-white border border-[#1f2937] rounded px-3 py-2 mt-2">
+        <option value="greedy">Greedy (Rapide)</option>
+        <option value="genetic">Génétique (Précis)</option>
+        <option value="bruteforce">Force Brute (Lent)</option>
+      </select>
+    </div>
+    <div style="flex:1;">
+      <label class="muted">Durée rotation (s)</label>
+      <input id="rotationDuration" type="number" value="10" min="5" max="60" class="w-full mt-2 px-3 py-2 bg-[#071826] rounded border border-[#122032]" />
+    </div>
+  </div>
+
+  <div style="margin-bottom:12px;">
+    <label class="muted">Compétences disponibles (sélectionner)</label>
+    <div id="skillsSelector" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;margin-top:8px;"></div>
+  </div>
+
+  <button id="btnOptimizeRotation" class="bg-gradient-to-r from-purple-600 to-blue-600 text-white font-bold px-6 py-3 rounded-lg w-full">
+    🔍 Calculer rotation optimale
+  </button>
+
+  <div id="optimizationProgress" style="display:none;margin-top:12px;padding:12px;background:rgba(139,92,246,0.1);border-radius:8px;">
+    <div class="muted">Calcul en cours...</div>
+    <div style="margin-top:8px;background:#1f2937;height:20px;border-radius:4px;overflow:hidden;">
+      <div id="progressBar" style="background:linear-gradient(90deg,#8b5cf6,#3b82f6);height:100%;width:0%;transition:width 0.3s;"></div>
+    </div>
+    <div id="progressText" class="muted" style="margin-top:6px;font-size:12px;"></div>
+  </div>
+
+  <div id="rotationResults" style="display:none;margin-top:12px;">
+    <div style="font-weight:700;margin-bottom:8px;color:#a78bfa;">Rotation Optimale Trouvée</div>
+    
+    <div class="result-cards">
+      <div class="result-card" style="background:linear-gradient(180deg,#7c3aed,#6b21d9);">
+        <h4>DPS Optimal</h4><p id="optimalDPS">0</p>
+      </div>
+      <div class="result-card" style="background:linear-gradient(180deg,#059669,#047857);">
+        <h4>Amélioration</h4><p id="dpsImprovement">+0%</p>
+      </div>
+      <div class="result-card" style="background:linear-gradient(180deg,#0369a1,#075985);">
+        <h4>Compétences</h4><p id="rotationSkillCount">0</p>
+      </div>
+    </div>
+
+    <div style="margin-top:16px;">
+      <div style="font-weight:600;margin-bottom:8px;">Timeline de la rotation :</div>
+      <div id="rotationTimeline" style="position:relative;background:#071826;border-radius:8px;padding:16px;min-height:120px;overflow-x:auto;"></div>
+    </div>
+
+    <div style="margin-top:16px;">
+      <div style="font-weight:600;margin-bottom:8px;">Séquence optimale :</div>
+      <div id="rotationSequence" style="display:flex;flex-wrap:wrap;gap:8px;"></div>
+    </div>
+
+    <div style="margin-top:16px;padding:12px;background:rgba(245,158,11,0.05);border-radius:8px;border:1px solid rgba(245,158,11,0.2);">
+      <div style="font-weight:600;margin-bottom:8px;color:#fbbf24;">💡 Conseils d'exécution</div>
+      <div id="rotationTips" class="muted" style="font-size:13px;line-height:1.6;"></div>
+    </div>
+  </div>
+</div>
+        </div>
+</div>
+</div>
+    <div class="row" style="margin-top:8px;">
+      <div class="col-left">
+        <div class="card" style="padding:12px;">
+          <div style="font-weight:700;margin-bottom:8px;">Spécialisations</div>
+
+          <div class="spec-slot-block">
+            <div class="muted">Spécialisation 1</div>
+            <div id="specSlot1" class="specs-grid"></div>
+          </div>
+
+          <div class="spec-slot-block">
+            <div class="muted">Spécialisation 2</div>
+            <div id="specSlot2" class="specs-grid"></div>
+          </div>
+
+          <div class="spec-slot-block">
+            <div class="muted">Spécialisation 3</div>
+            <div id="specSlotElite" class="specs-grid"></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-right">
+        <div class="card" style="padding:12px;">
+          <div style="font-weight:700;margin-bottom:8px;">Traits</div>
+          <div style="display:flex;gap:12px;">
+            <div style="flex:0 0 48%;">
+              <div class="muted">Spécialisation active pour affichage :</div>
+              <div id="activeSpecLabel" style="margin-top:8px;font-weight:700;">Aucune spécialisation sélectionnée</div>
+              <div style="margin-top:12px;" id="activeSpecIcon"></div>
+            </div>
+            <div style="flex:1;">
+              <div class="muted">Clique sur une spécialisation (dans les slots) pour l'afficher ici et sélectionner ses traits.</div>
+              <div id="traitsPlaceholder" style="margin-top:12px;"></div>
+            </div>
+          </div>
+
+          <div id="traitsListContainer" style="margin-top:12px;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const classMap = {
+  'Guerrier':'Warrior','Gardien':'Guardian','Revenant':'Revenant','Ingénieur':'Engineer','Rôdeur':'Ranger',
+  'Voleur':'Thief','Élémentaliste':'Elementalist','Envoûteur':'Mesmer','Nécromant':'Necromancer'
+};
+
+const armesUneMain = [
+  "Épée", "Hache", "Masse", "Dague",
+  "Pistolet", "Focus", "Torche", "Bouclier" ,"sceptre","cor de guerre"
+];
+
+const armesDeuxMains = [
+  "Espadon", "Marteau", "Arc long",
+  "Arc court", "Fusil", "Bâton", "Lance"
+];
+
+const weaponStrengthMap = {
+  "Épée": 940,
+  "Hache": 970,
+  "Masse": 1000,
+  "Dague": 920,
+  "Pistolet": 876,
+  "Focus": 873,
+  "Torche": 900,
+  "Bouclier": 850,
+  "sceptre":940,
+  "cor de guerre":850,
+  "Espadon": 1045,
+  "Marteau": 1034,
+  "Arc long": 955,
+  "Arc court": 920,
+  "Fusil": 1045,
+  "Bâton": 940,
+  "Lance": 950
+};
+
+function getSelectedWeaponStrength() {
+  let total = 0;
+  let count = 0;
+  [arme1, arme2, arme3, arme4].forEach(sel => {
+    const val = sel.value;
+    if (val && weaponStrengthMap[val]) {
+      total += weaponStrengthMap[val];
+      count++;
+    }
+  });
+  return count > 0 ? total / count : 0;
+}
+
+let apiSpecializations = {};
+let traitCache = {};
+let selectedSpecs = {1:null,2:null,elite:null};
+let selectedTraits = {1:{adept:null,master:null,grandmaster:null},2:{adept:null,master:null,grandmaster:null}, elite:{adept:null,master:null,grandmaster:null}};
+let chartInstance = null;
+let currentFocusedSlotForTraitSelection = 1;
+
+async function fetchSpecializations(){
+  try {
+    const res = await fetch('https://api.guildwars2.com/v2/specializations?ids=all');
+    const arr = await res.json();
+    arr.forEach(s => {
+      if(!s.profession) return;
+      const prof = s.profession;
+      if(!apiSpecializations[prof]) apiSpecializations[prof] = {core:[],elite:[]};
+      if(s.elite) apiSpecializations[prof].elite.push(s); else apiSpecializations[prof].core.push(s);
+    });
+    renderAllSpecPools();
+  } catch(e){ console.error('fetch specs error',e); }
+}
+
+async function fetchTraitsByIds(ids){
+  const missing = ids.filter(id => !traitCache[id]);
+  if(missing.length===0) return ids.map(id=>traitCache[id]).filter(Boolean);
+  const chunk = 200;
+  for(let i=0;i<missing.length;i+=chunk){
+    const chunkIds = missing.slice(i,i+chunk);
+    try {
+      const res = await fetch('https://api.guildwars2.com/v2/traits?ids=' + chunkIds.join(','));
+      const arr = await res.json();
+      arr.forEach(t => { traitCache[t.id] = t; });
+    } catch(e){ console.error('fetch traits error', e); }
+  }
+  return ids.map(id=>traitCache[id]).filter(Boolean);
+}
+
+function clearChildren(el){ while(el.firstChild) el.removeChild(el.firstChild); }
+
+function renderAllSpecPools(){
+  const frClass = document.getElementById('classe').value;
+  renderSpecPoolsForClass(frClass);
+}
+
+function renderSpecPoolsForClass(frClass){
+  const prof = classMap[frClass];
+  const specs = apiSpecializations[prof];
+  ['specSlot1','specSlot2','specSlotElite'].forEach(id=>clearChildren(document.getElementById(id)));
+  if(!specs) return;
+  specs.core.forEach(spec => appendSpecTile(spec));
+  specs.elite.forEach(spec => appendSpecTile(spec, true));
+}
+
+function appendSpecTile(spec, eliteOnly=false){
+  const tile = document.createElement('div');
+  tile.style.display='inline-block'; tile.style.textAlign='center'; tile.style.margin='6px';
+  const hex = document.createElement('div'); hex.className='hex';
+  const inner = document.createElement('div'); inner.className='inner';
+  const img = document.createElement('img'); img.src = spec.icon || '';
+  inner.appendChild(img); hex.appendChild(inner);
+  tile.appendChild(hex);
+  
+  if(!spec.elite){
+    const tile1 = tile.cloneNode(true);
+    tile1.querySelector('.hex').addEventListener('click', ()=> { assignSpecToSlot(1, spec); });
+    document.getElementById('specSlot1').appendChild(tile1);
+    
+    const tile2 = tile.cloneNode(true);
+    tile2.querySelector('.hex').addEventListener('click', ()=> { assignSpecToSlot(2, spec); });
+    document.getElementById('specSlot2').appendChild(tile2);
+  } else {
+    hex.addEventListener('click', ()=> { assignSpecToSlot('elite', spec); });
+    document.getElementById('specSlotElite').appendChild(tile);
+  }
+}
+
+function assignSpecToSlot(slot, spec){
+  if(slot === 'elite' && !spec.elite){
+    if(!confirm(spec.name + " n'est pas une spécialisation élite. Forcer l'assignation ?")) return;
+  }
+  if((slot ===1 || slot===2) && spec.elite){
+    if(!confirm("Cette spécialisation est élite. Placer quand même en Spé1/2 ?")) return;
+  }
+  selectedSpecs[slot] = spec;
+  selectedTraits[slot] = {adept:null,master:null,grandmaster:null};
+  currentFocusedSlotForTraitSelection = slot;
+  updateSlotBlockUI(slot);
+  renderTraitsForSlot(slot);
+  displayActiveSpec(spec);
+  renderAllSelectedTraits();
+}
+
+function updateSlotBlockUI(slot){
+  const containerId = slot==='elite' ? 'specSlotElite' : (slot===1 ? 'specSlot1' : 'specSlot2');
+  const parent = document.getElementById(containerId).parentNode;
+  const old = parent.querySelector('.selected-indicator');
+  if(old) old.remove();
+  if(!selectedSpecs[slot]) return;
+  const indicator = document.createElement('div'); indicator.className='selected-indicator'; indicator.style.marginBottom='8px';
+  indicator.innerHTML = `<div style="display:flex;align-items:center;gap:8px;"><div class="hex selected" style="margin:0;"><div class="inner"><img src="${selectedSpecs[slot].icon||''}"></div></div><div style="font-weight:700">${selectedSpecs[slot].name}${selectedSpecs[slot].elite ? ' (Élite)':''} — Slot ${slot}</div></div>`;
+  parent.insertBefore(indicator, parent.firstChild);
+}
+
+async function displayActiveSpec(spec){
+  document.getElementById('activeSpecLabel').textContent = spec.name + (spec.elite ? ' (Élite)':'');
+  document.getElementById('activeSpecIcon').innerHTML = `<div class="hex selected" style="margin-top:6px;"><div class="inner"><img src="${spec.icon||''}"></div></div>`;
+  
+  let major = spec.major_traits || [];
+  if((!major || major.length===0) && spec.id){
+    try{
+      const res = await fetch('https://api.guildwars2.com/v2/specializations?id=' + spec.id);
+      const data = await res.json();
+      major = data.major_traits || [];
+      spec.major_traits = major;
+    } catch(e){ console.error(e); }
+  }
+  
+  const container = document.getElementById('traitsListContainer');
+  clearChildren(container);
+  if(!major || major.length===0){ container.innerHTML = '<div class="muted">Aucun trait majeur trouvé.</div>'; return; }
+  await fetchTraitsByIds(major);
+  const groups = [[],[],[]];
+  for(let i=0;i<major.length;i++){ const col = Math.floor(i/3); if(col>=0 && col<3) groups[col].push(major[i]); }
+  const wrapper = document.createElement('div'); wrapper.style.display='flex'; wrapper.style.gap='12px';
+  ['Adepte','Maître','Grand Maître'].forEach((title, idx)=>{
+    const col = document.createElement('div'); col.style.flex='1';
+    const t = document.createElement('div'); t.className='muted'; t.style.marginBottom='6px'; t.textContent = title;
+    col.appendChild(t);
+    groups[idx].forEach(trId => {
+      const tobj = traitCache[trId]; 
+      if(!tobj) return;
+      const slotDiv = document.createElement('div'); 
+      slotDiv.className='trait-slot'; 
+      slotDiv.style.display='flex'; 
+      slotDiv.style.flexDirection='row'; 
+      slotDiv.style.alignItems='center';
+      slotDiv.style.width='auto';
+      slotDiv.style.height='auto';
+      slotDiv.style.padding='8px';
+      slotDiv.style.gap='8px';
+      
+      const img = document.createElement('img'); 
+      img.src = tobj.icon || ''; 
+      img.style.width='34px';
+      img.style.height='34px';
+      img.style.flexShrink='0';
+      slotDiv.appendChild(img);
+      
+      const textWrapper = document.createElement('div');
+      textWrapper.style.display='flex';
+      textWrapper.style.flexDirection='column';
+      textWrapper.style.gap='4px';
+      
+      const name = document.createElement('div'); 
+      name.style.fontSize='13px'; 
+      name.style.fontWeight='600';
+      name.textContent = tobj.name;
+      textWrapper.appendChild(name);
+      
+      const desc = document.createElement('div');
+      desc.style.fontSize='11px';
+      desc.style.color='#94a3b8';
+      desc.style.lineHeight='1.3';
+      desc.innerHTML = tobj.description || '';
+      textWrapper.appendChild(desc);
+      
+      slotDiv.appendChild(textWrapper);
+      
+      const targetSlot = currentFocusedSlotForTraitSelection;
+      const tierKey = idx===0 ? 'adept' : idx===1 ? 'master' : 'grandmaster';
+      if(selectedTraits[targetSlot] && selectedTraits[targetSlot][tierKey] === tobj.id){
+        slotDiv.classList.add('sel');
+      }
+      slotDiv.addEventListener('click', ()=>{
+        const s = currentFocusedSlotForTraitSelection;
+        if(!selectedTraits[s]) selectedTraits[s] = {adept:null,master:null,grandmaster:null};
+        if(selectedTraits[s][tierKey] === tobj.id) selectedTraits[s][tierKey] = null;
+        else selectedTraits[s][tierKey] = tobj.id;
+        displayActiveSpec(spec);
+        renderAllSelectedTraits();
+      });
+      col.appendChild(slotDiv);
+    });
+    wrapper.appendChild(col);
+  });
+  container.appendChild(wrapper);
+  showFocusedSlotHint();
+  renderAllSelectedTraits();
+}
+
+function showFocusedSlotHint(){
+  const ph = document.getElementById('traitsPlaceholder');
+  ph.innerHTML = `<div class="muted">Trait selectionne pour : <b>Slot ${currentFocusedSlotForTraitSelection}</b></div>
+  <div style="margin-top:6px;">
+    <button onclick="setFocus(1)" class="place-btn">Focus 1</button>
+    <button onclick="setFocus(2)" class="place-btn">Focus 2</button>
+    <button onclick="setFocus('elite')" class="place-btn">Focus E</button>
+    <button onclick="clearTraitsFocus()" style="margin-left:6px" class="place-btn">Effacer traits</button>
+  </div>`;
+}
+
+function setFocus(val){ currentFocusedSlotForTraitSelection = val; showFocusedSlotHint(); renderAllSelectedTraits(); }
+function clearTraitsFocus(){ if(confirm('Vider les traits du slot actuel ?')){ selectedTraits[currentFocusedSlotForTraitSelection] = {adept:null,master:null,grandmaster:null}; renderAllSelectedTraits(); } }
+
+function renderAllSelectedTraits(){
+  const existing = document.getElementById('traitsSummaryBlock'); if(existing) existing.remove();
+  const container = document.getElementById('traitsListContainer');
+  const summary = document.createElement('div'); summary.id='traitsSummaryBlock'; summary.style.marginTop='12px';
+  summary.innerHTML = '<div class="muted">Traits sélectionnés par slot :</div>';
+  for(const key of [1,2,'elite']){
+    const st = selectedTraits[key] || {adept:null,master:null,grandmaster:null};
+    const div = document.createElement('div'); div.style.marginTop='8px'; div.className='spec-slot-block';
+    const title = document.createElement('div'); title.style.fontWeight='700'; title.textContent = 'Slot ' + key;
+    div.appendChild(title);
+    const row = document.createElement('div'); row.style.display='flex'; row.style.gap='8px'; row.style.marginTop='8px';
+    ['adept','master','grandmaster'].forEach(tier=>{
+      const id = st[tier];
+      const box = document.createElement('div'); box.style.flex='1'; box.style.display='flex'; box.style.flexDirection='column'; box.style.alignItems='center';
+      const imgWrap = document.createElement('div'); imgWrap.style.width='48px'; imgWrap.style.height='48px';
+      const img = document.createElement('img'); img.src = id ? (traitCache[id]?.icon || '') : ''; img.style.width='48px'; img.style.height='48px'; img.style.objectFit='contain';
+      imgWrap.appendChild(img);
+      const name = document.createElement('div'); name.style.fontSize='12px'; name.style.marginTop='6px'; name.style.textAlign='center';
+      name.textContent = id ? (traitCache[id]?.name || '') : '—';
+      box.appendChild(imgWrap); box.appendChild(name);
+      row.appendChild(box);
+    });
+    const removeBtn = document.createElement('div'); removeBtn.style.marginTop='8px'; removeBtn.innerHTML = `<button class="place-btn" onclick="clearTraitsForSlot('${key}')">Effacer slot ${key}</button>`;
+    div.appendChild(row); div.appendChild(removeBtn);
+    summary.appendChild(div);
+  }
+  container.appendChild(summary);
+}
+
+function clearTraitsForSlot(slot){ selectedTraits[slot] = {adept:null,master:null,grandmaster:null}; renderAllSelectedTraits(); }
+
+function getTraitDescriptionPercent(traitObj){
+  if(!traitObj) return 0;
+  const txt = (traitObj.description||'') + ' ' + (traitObj.name||'');
+  const m = txt.match(/([-+]?\d+(\.\d+)?)\s*%/);
+  if(m) return parseFloat(m[1]) / 100;
+  return 0;
+}
+
+function computeTraitMultiplierAllSlots(){
+  const baseByTier = {adept:0.03, master:0.06, grandmaster:0.10};
+  let add = 0;
+  for(const slot of [1,2,'elite']){
+    const s = selectedTraits[slot];
+    if(!s) continue;
+    for(const tier of ['adept','master','grandmaster']){
+      const id = s[tier];
+      if(!id) continue;
+      add += baseByTier[tier];
+      const tObj = traitCache[id];
+      add += getTraitDescriptionPercent(tObj);
+    }
+  }
+  return 1 + add;
+}
+
+function computeDPS(power, weaponStrength, targetArmor, precision, ferocity, traitMultiplier){
+  const arm = targetArmor || 2597;
+  const skillCoefficient = 1.0;
+  const baseDamage = (weaponStrength * power * skillCoefficient) / arm;
+  const critChance = Math.min(1.0, 0.05 + (precision - 1000) / 2100);
+  const critMultiplier = 1.5 + (ferocity / 1500);
+  const avgDamagePerHit = baseDamage * (1 - critChance + critChance * critMultiplier);
+  return avgDamagePerHit * traitMultiplier;
+}
+
+async function runSimulation(){
+  const duration = Number(document.getElementById('duration').value) || 60;
+  const power = Number(document.getElementById('power').value) || 1000; // 1000 par défaut
+  const precision = Number(document.getElementById('precision').value) || 1000; // 1000 par défaut
+  const targetArmor = Number(document.getElementById('targetArmor').value) || 2597;
+  const ferocity = Number(document.getElementById('ferocity').value) || 0;
+  const traitMultiplier = computeTraitMultiplierAllSlots();
+  const weaponStrength = getSelectedWeaponStrength();
+  const skillCoefficient = 1.0;
+  const baseDamage = (weaponStrength * power * skillCoefficient) / targetArmor;
+  const critChance = Math.min(1.0, 0.05 + (precision - 1000) / 2100);
+  const critMultiplier = 1.5 + (ferocity / 1500);
+  const avgDamagePerHit = baseDamage * (1 - critChance + critChance * critMultiplier);
+  const dpsFinal = avgDamagePerHit * traitMultiplier;
+  const totalDamage = dpsFinal * duration;
+  const burstDps = dpsFinal * 1.5;
+  document.getElementById('avgDPS').textContent = Math.round(dpsFinal).toLocaleString();
+  document.getElementById('burstDPS').textContent = Math.round(burstDps).toLocaleString();
+  document.getElementById('totalDamage').textContent = Math.round(totalDamage).toLocaleString();
+  document.getElementById('simDuration').textContent = duration + 's';
+  document.getElementById("weaponStrengthDisplay").textContent = Math.round(weaponStrength);
+  const calculDetails = document.getElementById('calculContent');
+  calculDetails.innerHTML = `
+    <div><strong>1. Dégâts de base :</strong> (${Math.round(weaponStrength)} × ${power} × ${skillCoefficient}) / ${targetArmor} = <span style="color:#fbbf24">${baseDamage.toFixed(2)}</span></div>
+    <div style="margin-top:6px;"><strong>2. Taux critique :</strong> 5% + (${precision} - 1000) / 2100 = <span style="color:#fbbf24">${(critChance * 100).toFixed(1)}%</span></div>
+    <div style="margin-top:6px;"><strong>3. Multiplicateur critique :</strong> 150% + (${ferocity} / 1500) = <span style="color:#fbbf24">${(critMultiplier * 100).toFixed(1)}%</span></div>
+    <div style="margin-top:6px;"><strong>4. Dégâts moyens par coup :</strong> ${baseDamage.toFixed(2)} × [${((1 - critChance) * 100).toFixed(1)}% + ${(critChance * 100).toFixed(1)}% × ${(critMultiplier * 100).toFixed(1)}%] = <span style="color:#fbbf24">${avgDamagePerHit.toFixed(2)}</span></div>
+    <div style="margin-top:6px;"><strong>5. Multiplicateur traits :</strong> <span style="color:#fbbf24">×${traitMultiplier.toFixed(3)}</span> ${traitMultiplier > 1 ? '(+' + ((traitMultiplier - 1) * 100).toFixed(1) + '%)' : ''}</div>
+    <div style="margin-top:6px;"><strong>6. DPS final :</strong> ${avgDamagePerHit.toFixed(2)} × ${traitMultiplier.toFixed(3)} = <span style="color:#10b981;font-weight:700;font-size:15px">${Math.round(dpsFinal).toLocaleString()}</span></div>
+  `;
+  const labels = []; const data = [];
+  for(let i=0;i<duration;i++){ labels.push((i+1).toString()); data.push(Math.round(dpsFinal)); }
+  const ctx = document.getElementById('dpsChart').getContext('2d');
+  if(chartInstance) chartInstance.destroy();
+  chartInstance = new Chart(ctx, { type:'line', data:{ labels, datasets:[{ label:'DPS', data, fill:true, tension:0.2 }] }, options:{ responsive:true, maintainAspectRatio:false, scales:{ y:{ beginAtZero:true } } } });
+}
+
+document.getElementById('classe').addEventListener('change', ()=> renderAllSpecPools());
+document.getElementById('btnSimulateTop').addEventListener('click', ()=> runSimulation());
+
+async function renderTraitsForSlot(slot){
+  const spec = selectedSpecs[slot];
+  if(!spec) return;
+  if(!spec.major_traits || spec.major_traits.length===0){
+    try{
+      const res = await fetch('https://api.guildwars2.com/v2/specializations?id=' + spec.id);
+      const data = await res.json();
+      spec.major_traits = data.major_traits || [];
+    } catch(e){ console.error(e); }
+  }
+  if(spec.major_traits && spec.major_traits.length>0) await fetchTraitsByIds(spec.major_traits);
+  renderAllSelectedTraits();
+}
+
+window.assignSpecToSlot = assignSpecToSlot;
+window.setFocus = setFocus;
+window.clearTraitsForSlot = clearTraitsForSlot;
+window.clearTraitsFocus = clearTraitsFocus;
+
+function remplirSelect(select, inclureDeuxMains = true) {
+  select.innerHTML = "";
+  const optionVide = document.createElement("option");
+  optionVide.value = "";
+  optionVide.textContent = "— Aucune —";
+  select.appendChild(optionVide);
+
+  const groupe1M = document.createElement("optgroup");
+  groupe1M.label = "Armes à une main";
+  armesUneMain.forEach(a => {
+    const o = document.createElement("option");
+    o.value = a;
+    o.textContent = a;
+    groupe1M.appendChild(o);
+  });
+  select.appendChild(groupe1M);
+
+  if (inclureDeuxMains) {
+    const groupe2M = document.createElement("optgroup");
+    groupe2M.label = "Armes à deux mains";
+    armesDeuxMains.forEach(a => {
+      const o = document.createElement("option");
+      o.value = a;
+      o.textContent = a;
+      groupe2M.appendChild(o);
+    });
+    select.appendChild(groupe2M);
+  }
+}
+
+const arme1 = document.getElementById("arme1");
+const arme2 = document.getElementById("arme2");
+const arme3 = document.getElementById("arme3");
+const arme4 = document.getElementById("arme4");
+
+[arme1, arme2, arme3, arme4].forEach(s => remplirSelect(s, true));
+
+function verifierBlocage(mainGauche, mainDroite) {
+  const valG = mainGauche.value;
+  const valD = mainDroite.value;
+
+  const isGaucheDeuxMains = armesDeuxMains.includes(valG);
+  const isDroiteDeuxMains = armesDeuxMains.includes(valD);
+
+  if (isGaucheDeuxMains) {
+    mainDroite.value = "";
+    mainDroite.disabled = true;
+  } else if (isDroiteDeuxMains) {
+    mainGauche.value = "";
+    mainGauche.disabled = true;
+  } else {
+    mainGauche.disabled = false;
+    mainDroite.disabled = false;
+  }
+}
+
+[arme1, arme2].forEach(s => s.addEventListener("change", () => verifierBlocage(arme1, arme2)));
+[arme3, arme4].forEach(s => s.addEventListener("change", () => verifierBlocage(arme3, arme4)));
+
+fetchSpecializations().then(()=> renderAllSpecPools());
+function getSelectedSkills() {
+  const boxes = document.querySelectorAll('.skill-box-select');
+  const skills = [];
+  boxes.forEach(b=>{
+    if(b.checked){
+      skills.push({
+        name: b.dataset.name,
+        coeff: Number(b.dataset.coeff),
+        cd: Number(b.dataset.cd),
+        cast: Number(b.dataset.cast)
+      });
+    }
+  });
+  return skills;
+}
+
+function computeSkillDPS(skill, power, ws, armor) {
+  return (ws * power * skill.coeff) / armor;
+}
+
+function greedyRotation(skills, duration, stats){
+  let timeline = [];
+  let t = 0;
+  let cds = skills.map(()=>0);
+  while(t < duration){
+    let best = -1, bestDmg = 0;
+    for(let i=0;i<skills.length;i++){
+      if(cds[i] <= t){
+        const dmg = computeSkillDPS(skills[i], stats.power, stats.ws, stats.armor);
+        if(dmg > bestDmg){
+          bestDmg = dmg;
+          best = i;
+        }
+      }
+    }
+    if(best === -1){ t += 0.1; continue; }
+    const s = skills[best];
+    timeline.push({t, name:s.name});
+    cds[best] = t + s.cd;
+    t += s.cast;
+  }
+  return timeline;
+}
+
+function rotationDPS(timeline, skills, stats){
+  let dmg = 0;
+  timeline.forEach(ev=>{
+    const s = skills.find(x=>x.name === ev.name);
+    dmg += computeSkillDPS(s, stats.power, stats.ws, stats.armor);
+  });
+  return dmg / stats.duration;
+}
+
+async function optimizeRotation(){
+  const algo = document.getElementById('optimizationAlgo').value;
+  const duration = Number(document.getElementById('rotationDuration').value);
+  const skills = getSelectedSkills();
+  if(skills.length === 0){ alert("Aucune compétence sélectionnée."); return; }
+
+  const stats = {
+    power: Number(document.getElementById('power').value),
+    armor: Number(document.getElementById('targetArmor').value),
+    ws: getSelectedWeaponStrength(),
+    duration
+  };
+
+  let timeline = greedyRotation(skills, duration, stats);
+  const dps = rotationDPS(timeline, skills, stats);
+
+  document.getElementById('optimalDPS').textContent = Math.round(dps);
+  document.getElementById('rotationSkillCount').textContent = timeline.length;
+  document.getElementById('dpsImprovement').textContent = "+0%";
+
+  const seq = document.getElementById('rotationSequence');
+  seq.innerHTML = "";
+  timeline.forEach(ev=>{
+    const box = document.createElement('div');
+    box.style.padding = "6px 10px";
+    box.style.border = "1px solid #444";
+    box.style.borderRadius = "6px";
+    box.textContent = ev.name + " @ " + ev.t.toFixed(1) + "s";
+    seq.appendChild(box);
+  });
+
+  document.getElementById('rotationResults').style.display = "block";
+}
+
+document.getElementById('btnOptimizeRotation').addEventListener('click', optimizeRotation);
+function loadDummySkills(){
+  const cont = document.getElementById('skillsSelector');
+  cont.innerHTML = "";
+  const base = [
+    {name:'Skill A', coeff:1.2, cd:5, cast:0.5},
+    {name:'Skill B', coeff:0.8, cd:3, cast:0.25},
+    {name:'Skill C', coeff:2.0, cd:8, cast:0.75},
+  ];
+  base.forEach(s=>{
+    const div = document.createElement('div');
+    div.style.padding = "8px";
+    div.style.background = "#0b1220";
+    div.style.border = "1px solid #1f2937";
+    div.style.borderRadius = "8px";
+
+    div.innerHTML = `
+      <label>
+        <input type="checkbox" class="skill-box-select" 
+        data-name="${s.name}" data-coeff="${s.coeff}" 
+        data-cd="${s.cd}" data-cast="${s.cast}"> 
+        <b>${s.name}</b><br>
+        Coeff: ${s.coeff} — CD: ${s.cd}s — Cast: ${s.cast}s
+      </label>`;
+    cont.appendChild(div);
+  });
+}
+
+loadDummySkills();
+function getSelectedWeaponApiTypes(){
+  const vals = new Set();
+  [arme1, arme2, arme3, arme4].forEach(s=>{
+    const v = s.value;
+    if(v && weaponApiMap[v]) vals.add(weaponApiMap[v]);
+  });
+  return vals;
+}
+function getSelectedTraitIds(){
+  const ids = [];
+  [1,2,'elite'].forEach(k=>{
+    const st = selectedTraits[k];
+    if(!st) return;
+    ['adept','master','grandmaster'].forEach(tier=>{
+      if(st[tier]) ids.push(st[tier]);
+    });
+  });
+  return ids;
+}
+async function loadRealSkillsForProfession(prof){
+  if(window._gw2_all_skills && window._gw2_all_skills.prof === prof) return window._gw2_all_skills.list;
+  const all = await fetch("https://api.guildwars2.com/v2/skills?ids=all").then(r=>r.json());
+  const usable = all.filter(s => s.professions && s.professions.includes(prof));
+  window._gw2_all_skills = {prof, list: usable};
+  return usable;
+}
+async function loadSkillsSelectorReal(){
+  const fr = document.getElementById("classe").value;
+  const prof = classMap[fr];
+  const skillList = await loadRealSkillsForProfession(prof);
+  const cont = document.getElementById('skillsSelector');
+  cont.innerHTML = "";
+  const selectedSpecIds = [];
+  [1,2,'elite'].forEach(k=>{
+    const sp = selectedSpecs[k];
+    if(sp && sp.id) selectedSpecIds.push(sp.id);
+  });
+  const weaponTypes = getSelectedWeaponApiTypes();
+  const selectedTraitIds = getSelectedTraitIds();
+  const traitUnlocked = new Set();
+  for(const tid of selectedTraitIds){
+    const t = traitCache[tid];
+    if(!t) continue;
+    if(t.skills && Array.isArray(t.skills)){
+      t.skills.forEach(sid => traitUnlocked.add(sid));
+    }
+    if(t.facts && Array.isArray(t.facts)){
+      t.facts.forEach(f=>{
+        if(f.type === 'Skill' && f.skill_id) traitUnlocked.add(f.skill_id);
+      });
+    }
+  }
+  const candidates = skillList.filter(s=>{
+    if(selectedSpecIds.length > 0){
+      if(s.specialization && !selectedSpecIds.includes(s.specialization)) {
+        return false;
+      }
+    }
+    if(s.weapon_type){
+      if(weaponTypes.size > 0 && !weaponTypes.has(s.weapon_type)) return false;
+    }
+    return true;
+  });
+  let finalSkills = candidates;
+  if(traitUnlocked.size > 0){
+    const unlockedArr = skillList.filter(s => traitUnlocked.has(s.id));
+    const map = new Map();
+    finalSkills.forEach(s=>map.set(s.id,s));
+    unlockedArr.forEach(s=>map.set(s.id,s));
+    finalSkills = Array.from(map.values());
+  }
+  finalSkills.sort((a,b)=>{
+    const slotOrder = {'Weapon':0,'Heal':1,'Utility':2,'Elite':3,'Profession':4,'Bundle':5,'Pet':6};
+    const sa = a.slot || 'Weapon';
+    const sb = b.slot || 'Weapon';
+    const oa = slotOrder[sa] !== undefined ? slotOrder[sa] : 10;
+    const ob = slotOrder[sb] !== undefined ? slotOrder[sb] : 10;
+    if(oa !== ob) return oa - ob;
+    return (a.name||'').localeCompare(b.name||'');
+  });
+  finalSkills.forEach(s=>{
+    const div = document.createElement('div');
+    div.style.padding = "6px";
+    div.style.background = "#071826";
+    div.style.border = "1px solid #122032";
+    div.style.borderRadius = "8px";
+    div.style.display = "flex";
+    div.style.alignItems = "center";
+    div.style.gap = "8px";
+
+    const checked = traitUnlocked.size>0 ? traitUnlocked.has(s.id) || true : true; // if trait unlocked exists, show both unlocked and base skills - keep checked default true
+    div.innerHTML = `
+      <label style="display:flex;gap:8px;align-items:center;width:100%;">
+        <input type="checkbox" class="skill-box-select" 
+          data-id="${s.id}" data-name="${s.name}" 
+          data-coeff="${(s.coefficient && s.coefficient[0] && s.coefficient[0].value) ? s.coefficient[0].value : 1.0}" 
+          data-cd="${s.cooldown || 0}" 
+          data-cast="${(s.cast_time||0)/1000 || 0}">
+        <img src="${s.icon || ''}" style="width:28px;height:28px;flex-shrink:0;">
+        <div style="flex:1;">
+          <div style="font-weight:700;">${s.name}</div>
+          <div style="font-size:12px;color:#94a3b8;">Slot: ${s.slot || 'Weapon'} ${s.weapon_type ? '— Weapon: '+s.weapon_type : ''}</div>
+        </div>
+      </label>
+    `;
+    cont.appendChild(div);
+  });
+}
+function simulateFrameByFrame(skills, duration, stats){
+  let timeline = [];
+  let t = 0;
+  let frames = Math.floor(duration / FRAME);
+  let cds = skills.map(()=>0);
+  let casting = null;
+  let castRemaining = 0;
+
+  for(let f=0; f<frames; f++){
+    t = f * FRAME;
+
+    if(casting){
+      castRemaining -= FRAME;
+      if(castRemaining <= 0){
+        const dmg = computeSkillDPS(casting, stats.power, stats.ws, stats.armor);
+        timeline.push({t, name:casting.name, dmg});
+        casting = null;
+      }
+      continue;
+    }
+
+    let best = -1, bestDmg = 0;
+    for(let i=0;i<skills.length;i++){
+      if(cds[i] <= t){
+        const dmg = computeSkillDPS(skills[i], stats.power, stats.ws, stats.armor);
+        if(dmg > bestDmg){
+          bestDmg = dmg;
+          best = i;
+        }
+      }
+    }
+
+    if(best >= 0){
+      casting = skills[best];
+      castRemaining = casting.cast;
+      cds[best] = t + casting.cd;
+    }
+  }
+
+  const total = timeline.reduce((a,b)=>a+b.dmg,0);
+  return {timeline, dps: total/duration};
+}
+
+async function optimizeRotationFrameMode(){
+  const duration = Number(document.getElementById('rotationDuration').value);
+  const skillBoxes = Array.from(document.querySelectorAll('.skill-box-select')).filter(b=>b.checked);
+  const skills = skillBoxes.map(b=>({
+    id: Number(b.dataset.id),
+    name: b.dataset.name,
+    coeff: Number(b.dataset.coeff),
+    cd: Number(b.dataset.cd),
+    cast: Number(b.dataset.cast)
+  }));
+  if(skills.length === 0){ alert("Aucune compétence sélectionnée."); return; }
+
+  const stats = {
+    power: Number(document.getElementById('power').value),
+    armor: Number(document.getElementById('targetArmor').value),
+    ws: getSelectedWeaponStrength(),
+    duration
+  };
+
+  const result = simulateFrameByFrame(skills, duration, stats);
+
+  document.getElementById('optimalDPS').textContent = Math.round(result.dps);
+  document.getElementById('rotationSkillCount').textContent = result.timeline.length;
+  document.getElementById('dpsImprovement').textContent = "+0%";
+
+  const seq = document.getElementById('rotationSequence');
+  seq.innerHTML = "";
+  result.timeline.forEach(ev=>{
+    const box = document.createElement('div');
+    box.style.padding = "6px 10px";
+    box.style.border = "1px solid #444";
+    box.style.borderRadius = "6px";
+    box.textContent = ev.name + " @ " + ev.t.toFixed(2) + "s";
+    seq.appendChild(box);
+  });
+
+  document.getElementById('rotationResults').style.display = "block";
+}
+document.getElementById('btnOptimizeRotation').onclick = optimizeRotationFrameMode;
+document.getElementById('classe').addEventListener('change', loadSkillsSelectorReal);
+[arme1, arme2, arme3, arme4].forEach(s=>s.addEventListener('change', loadSkillsSelectorReal));
+
+</script>
+</body>
+</html>
