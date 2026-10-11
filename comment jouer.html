@@ -157,6 +157,7 @@
     #tab-untamed:checked~.wrapper .panel-untamed,
     #tab-evoker:checked~.wrapper .panel-evoker,
     #tab-spellbreaker:checked~.wrapper .panel-spellbreaker,
+    #tab-support-spellbreaker:checked~.wrapper .panel-support-spellbreaker,
     #tab-dragonhunter:checked~.wrapper .panel-dragonhunter,
     #tab-luminary:checked~.wrapper .panel-luminary,
     #tab-firebrand:checked~.wrapper .panel-firebrand,
@@ -182,6 +183,7 @@
     #tab-untamed:checked~.wrapper .sidebar label[for="tab-untamed"],
     #tab-evoker:checked~.wrapper .sidebar label[for="tab-evoker"],
     #tab-spellbreaker:checked~.wrapper .sidebar label[for="tab-spellbreaker"],
+    #tab-support-spellbreaker:checked~.wrapper .sidebar label[for="tab-support-spellbreaker"],
     #tab-dragonhunter:checked~.wrapper .sidebar label[for="tab-dragonhunter"],
     #tab-luminary:checked~.wrapper .sidebar label[for="tab-luminary"],
     #tab-firebrand:checked~.wrapper .sidebar label[for="tab-firebrand"],
@@ -210,6 +212,7 @@
   <input type="radio" name="tab" id="tab-untamed" class="tab-radio">
   <input type="radio" name="tab" id="tab-evoker" class="tab-radio">
   <input type="radio" name="tab" id="tab-spellbreaker" class="tab-radio">
+  <input type="radio" name="tab" id="tab-support-spellbreaker" class="tab-radio">
   <input type="radio" name="tab" id="tab-dragonhunter" class="tab-radio">
   <input type="radio" name="tab" id="tab-luminary" class="tab-radio">
   <input type="radio" name="tab" id="tab-firebrand" class="tab-radio">
@@ -255,6 +258,9 @@
         <li><label for="tab-vindicator-support">Support Vindicator (Revenant)<a class="build-link"
               href="https://gw2mists.com/en/builds/revenant/support-vindicator" target="_blank"
               rel="noopener noreferrer">Build McM</a></label></li>
+        <li><label for="tab-support-spellbreaker">Support Spellbreaker (Guerrier)<a class="build-link"
+              href="https://snowcrows.com/builds/wvw/warrior/support-spellbreaker" target="_blank"
+              rel="noopener noreferrer">Snow Crows</a></label></li>
         <li><label for="tab-guardian">Power Guardian (Gardien)<a class="build-link"
               href="https://gw2mists.com/en/builds/guardian/power-guardian" target="_blank"
               rel="noopener noreferrer">Build McM</a></label></li>
@@ -276,7 +282,7 @@
         <li><label for="tab-vindicator">Power Vindicator (Revenant)<a class="build-link"
               href="https://gw2mists.com/en/builds/revenant/power-vindicator" target="_blank"
               rel="noopener noreferrer">Build McM</a></label></li>
-        <li><label for="tab-amalgame">Power Amalgame (Élémentaliste)<a class="build-link"
+        <li><label for="tab-amalgame">Power Amalgame (Ingénieur)<a class="build-link"
               href="https://gw2mists.com/en/builds/engineer/power-amalgam" target="_blank"
               rel="noopener noreferrer">Build McM</a></label></li>
         <li><label for="tab-necro-power">Power Necro (Nécromant)<a class="build-link"
@@ -819,15 +825,15 @@
         <div class="section-title">Appel Pull</div>
         <div class="rotation-line">
           <div class="skill-row">
-            <div class="skill-bind">Pull</div>
+            <div class="skill-bind">Action</div>
             <span class="spell" data-skill-id="3256402" data-skill-name="Brise-ligne"></span>
           </div>
           <div class="skill-row">
-            <div class="skill-bind">Group</div>
+            <div class="skill-bind">Action</div>
             <span class="spell" data-skill-id="3256403" data-skill-name="Attraction provoquée"></span>
           </div>
           <div class="skill-row">
-            <div class="skill-bind">Ctrl</div>
+            <div class="skill-bind">Action</div>
             <span class="spell" data-skill-id="3256405" data-skill-name="Rugissement de défi"></span>
           </div>
         </div>
@@ -835,11 +841,11 @@
         <div class="section-title">Engage</div>
         <div class="rotation-line">
           <div class="skill-row">
-            <div class="skill-bind">Bond</div>
+            <div class="skill-bind">Action</div>
             <span class="spell" data-skill-id="3256401" data-skill-name="Bond vaillant"></span>
           </div>
           <div class="skill-row">
-            <div class="skill-bind">Throw</div>
+            <div class="skill-bind">Action</div>
             <span class="spell" data-skill-id="3379202" data-skill-name="Lancer perturbateur"></span>
           </div>
         </div>
@@ -847,15 +853,15 @@
         <div class="section-title">Spike</div>
         <div class="rotation-line">
           <div class="skill-row">
-            <div class="skill-bind">Signe</div>
+            <div class="skill-bind">Action</div>
             <span class="spell" data-skill-id="103798" data-skill-name="Signe de pouvoir"></span>
           </div>
           <div class="skill-row">
-            <div class="skill-bind">Lance</div>
+            <div class="skill-bind">Action</div>
             <span class="spell" data-skill-id="3379203" data-skill-name="Assistance de la maréchale de la lance"></span>
           </div>
           <div class="skill-row">
-            <div class="skill-bind">Circ.</div>
+            <div class="skill-bind">Action</div>
             <span class="spell" data-skill-id="3379205" data-skill-name="Lancer du circaète"></span>
           </div>
         </div>
@@ -1539,6 +1545,78 @@
           <li>Maintenir au moins une ombre active en permanence.</li>
           <li>Se positionner prudemment pour éviter d'être interrompu.</li>
           <li>Synchroniser Well of Corruption, Ghastly Breach et Nightfall avec les appels du commandant.</li>
+        </ul>
+      </section>
+
+      <section class="panel panel-support-spellbreaker">
+        <div class="class-title">Support Spellbreaker</div>
+        <p>Support de zone orienté contrôle, cleanse et protection du sous-groupe. L'objectif est de garder les alliés stables, retirer les boons ennemis et intervenir au bon moment pour sécuriser les engages et les appels du commandant.</p>
+
+        <div class="section-title">Appel Pull</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">Pull</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Brise-ligne"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Swap</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Bouclier / Lance"></span>
+          </div>
+        </div>
+        <p>Utilisez le pull pour serrer le groupe, puis basculez rapidement sur la bonne arme selon le moment de l'engage.</p>
+
+        <div class="section-title">Engage / Push</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">Bond</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Bond vaillant"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">F1</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Coup de bouclier"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Ctrl</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Rugissement de défi"></span>
+          </div>
+        </div>
+        <p>Le but n'est pas de faire le plus de dégâts, mais d'ouvrir le groupe ennemi et de l'empêcher de repositionner proprement.</p>
+
+        <div class="section-title">Cleanse / Stabilité</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">Cleanse</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Dissipation / purge"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Protect</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Bouclier du jugement"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">Stab</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Vigueur / stabilité"></span>
+          </div>
+        </div>
+        <p>Priorisez le cleanse sur les dégâts de zone et la stabilité sur les points où l'ennemi veut vous interrompre ou vous faire reculer.</p>
+
+        <div class="section-title">Appel Puits / Well</div>
+        <div class="rotation-line">
+          <div class="skill-row">
+            <div class="skill-bind">Well</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Zone de contrôle"></span>
+          </div>
+          <div class="skill-row">
+            <div class="skill-bind">F2</div>
+            <span class="spell" data-skill-id="-1" data-skill-name="Coup de lance"></span>
+          </div>
+        </div>
+        <p>Utile pour garder la pression sur les ennemis qui tentent de sortir du groupe ou de sécuriser une zone.</p>
+
+        <div class="section-title">Priorité absolue</div>
+        <ul class="priorities">
+          <li>Maintenir la stabilité et les protections du sous-groupe avant de chercher le maximum de dégâts.</li>
+          <li>Nettoyer les effets de contrôle qui menacent l'alignement du groupe.</li>
+          <li>Intervenir au bon moment sur les appels du commandant, pas uniquement sur l'initiative personnelle.</li>
         </ul>
       </section>
 
